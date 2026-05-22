@@ -148,7 +148,7 @@ class Application:
             self.executar_fluxo(url=qrcode)
 
     def modo_sem_qrcode(self):
-        self.executar_fluxo()
+            self.executar_fluxo()
 
     def iniciar_modo_qrcode(self):
         if self.validacoes(usar_qrcode=True):
