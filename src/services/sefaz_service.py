@@ -10,14 +10,14 @@ from utils.funcs import criar_pasta
 
 class SefazBot:
 
-    # Inicializa a classe, recebendo a chave como parâmetro e garante que a pasta de saída para as NFs seja criada.
+    # Inicializa o bot e cria a pasta de saída para as NFs
     def __init__(self, chave):
         criar_pasta('data/notas_fiscais')
 
         self.driver = None
         self.chave = chave
 
-    # Recebe a URL como parâmetro e define as configurações de janela, podendo rodar em segundo plano (headless).
+    # Configura e inicia o navegador
     def configura_navegador(self, site, headless=False):
         try:
             options = Options()
@@ -36,7 +36,7 @@ class SefazBot:
             messagebox.showerror('Erro', f'Ocorreu um erro inesperado. Fechando navegador...')
             self.driver.quit()
 
-    # Insere a chave informada pelo usuário no site e abre o CAPTCHA para o usuário resolver manualmente. Ao identificar a resolução do CAPTCHA, prossegue automaticamente.
+    # Preenche o campo da chave e aguarda o CAPTCHA ser resolvido
     def digita_chave(self):
         try:
             WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.ID,'chave'))).send_keys(self.chave)
@@ -62,7 +62,7 @@ class SefazBot:
             # Aguarda o máximo de tempo para o usuário resolver o CAPTCHA
             WebDriverWait(self.driver, 600, poll_frequency=1).until(EC.presence_of_element_located((By.ID,'tabResult')))
 
-            # Verifica se os valores da tabela estão carregados (Nome do produto, Valor unitário, Quantidade, etc)
+            # Aguarda carregamento da tabela 
             WebDriverWait(self.driver, 60, poll_frequency=1).until(EC.presence_of_all_elements_located((By.CLASS_NAME,'txtTit')))
 
             linhas = self.driver.find_elements(By.CSS_SELECTOR,'#tabResult tbody tr')
@@ -103,7 +103,6 @@ class SefazBot:
                         "valor_total": str(valor_total)
                     })
 
-            # Transforma a lista em um DataFrame para converter em um arquivo .csv
             df = pd.DataFrame(dados)
             df.to_csv(f"data/notas_fiscais/nf_{self.chave[:44]}.csv",index=False,encoding="utf-8")
 
