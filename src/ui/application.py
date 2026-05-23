@@ -11,13 +11,15 @@ from utils.funcs import *
 set_appearance_mode('dark')
 
 class Application:
+    # Inicializa a aplicação, criando a janela principal, o frame e os widgets (labels, entrys, buttons e radio buttons).
     def __init__(self):
         self.root = CTk()
         self.config = load_config()
         self.window()
         self.frame()
         self.widgets()
-        
+    
+    # Configura a janela principal da aplicação, definindo o título, o ícone, o tamanho e a possibilidade de redimensionamento.
     def window(self):
         self.root.title('Leitor de Notas Fiscais')
         self.root.iconbitmap('assets/icons/logo.ico')
@@ -28,6 +30,7 @@ class Application:
         self.frame_principal = CTkFrame(master=self.root, fg_color='#32a14f', border_color="#75d58f", border_width=3)
         self.frame_principal.place(relx=0.02, rely=0.02, relwidth=0.96, relheight=0.96)
 
+    # Cria os widgets da aplicação, incluindo labels, entrys, buttons e radio buttons, e os posiciona na janela utilizando o método place() para definir a posição relativa (relx e rely) e o tamanho (width e height) de cada widget.
     def widgets(self):
         # Imagens
         img_qrcode = Image.open('assets/images/qrcode.png')
@@ -88,10 +91,12 @@ class Application:
         self.rb_modo_completo = CTkRadioButton(master=self.frame_principal, text='Coletar e inserir dados', variable=self.rb_modo, value='automacao_completa', font=('Arial', 14, 'bold'), hover_color='#235D34', fg_color='#235D34', border_color="#64CA84")
         self.rb_modo_completo.place(relx=0.036, rely=0.365)
 
+    # Limpa as mensagens de erro exibidas na interface, definindo o texto dos labels de erro como vazio e garantindo que a interface fique limpa para novas validações.
     def limpar_erros(self):
         self.lb_erro_celula.configure(text='')
         self.lb_erro_chave.configure(text='')
         self.lb_erro_modo.configure(text='')
+
 
     def validacoes(self, usar_qrcode=False):
         self.limpar_erros()
@@ -119,7 +124,8 @@ class Application:
                 valido = False
 
         return valido
-        
+    
+    # Carrega um arquivo CSV selecionado pelo usuário, extrai a chave da nota fiscal a partir do nome do arquivo e insere essa chave no campo de entrada correspondente na interface gráfica. Essa função é útil para facilitar o processo de carregamento de dados, permitindo que o usuário selecione um arquivo já existente em vez de digitar a chave manualmente.
     def carregar_arquivo(self):
         nome_arquivo = selecionar_arquivo()
 
@@ -158,6 +164,7 @@ class Application:
         if self.validacoes():
             threading.Thread(target=self.modo_sem_qrcode, daemon=True).start()
 
+    # Fluxo principal da aplicação, que é executado quando o usuário clica no botão "Iniciar". Dependendo do modo selecionado (coletar dados, inserir dados ou ambos), a função executa as ações correspondentes, como configurar o navegador, coletar os dados da nota fiscal e inserir os dados no Excel. O fluxo é executado em uma thread separada para evitar que a interface gráfica fique congelada durante a execução das tarefas.
     def executar_fluxo(self, url=None):
         if self.rb_modo.get() == 'automacao_web':
             messagebox.showinfo('Iniciando', 'Iniciando coleta de dados')
