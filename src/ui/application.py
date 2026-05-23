@@ -1,8 +1,8 @@
 import threading
 from PIL import Image
-from config.config_manager import load_config
 from customtkinter import *
 from tkinter import messagebox
+from config.config_manager import load_config
 from services.sefaz_service import SefazBot
 from services.excel_service import ExcelBot
 from utils.validators import valida_celula
