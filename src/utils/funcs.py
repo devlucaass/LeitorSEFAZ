@@ -3,9 +3,10 @@ import cv2
 import pyautogui
 import pyperclip
 from pyzbar import pyzbar
-from config.config_manager import load_config
+from openpyxl import Workbook
 from utils.validators import valida_chave
 from tkinter import messagebox, filedialog
+from config.config_manager import load_config
 
 config = load_config()
 
@@ -55,6 +56,39 @@ def selecionar_arquivo():
         filetypes=[('Arquivos CSV', '*.csv'), ('Todos os arquivos', '*.*')]
     )
     return arquivo
+
+def salvar_arquivo():
+    caminho = filedialog.asksaveasfilename(
+        initialfile='modelo_planilha.xlsx',
+        defaultextension='.xlsx',
+        filetypes=[('Arquivos Excel', '*.xlsx'), ('Todos os arquivos', '*.*')],
+        title='Salvar modelo da planilha'
+    )
+
+    if not caminho:
+        return
+    
+    return caminho
+
+def gerar_modelo_planilha():
+    wb = Workbook()
+
+    ws = wb.active
+    ws.title = 'CONSOLIDADO - COMPRAS'
+
+    colunas = ['PRODUTO', 'VALOR', 'ITENS', 'GRANDEZA', 'QUANTIDADE DE PRODUTO', 'VALOR UNITÁRIO', 'QUANTIDADE', 'TOTAL']
+
+    ws.append(colunas)
+
+    caminho = salvar_arquivo()
+
+    if not caminho:
+        return
+    
+    wb.save(caminho)
+
+    messagebox.showinfo('Sucesso', 'Modelo da planilha criado com sucesso!')
+
 
 # Lê QRCodes e retorna seu valor em string.
 def ler_qrcode():
