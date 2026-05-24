@@ -79,6 +79,9 @@ class Application:
         self.btn_ler_qrcode = CTkButton(master=self.frame_principal, text='Ler QRCode', font=('Arial', 15, 'bold'), width=239, height=35, fg_color='#235D34', border_color="#72A782", border_width=2, hover_color="#33844B", image=self.img_qrcode, compound='left', command=self.iniciar_modo_qrcode)
         self.btn_ler_qrcode.place(relx=0.036, rely=0.550)
 
+        self.btn_gerar_modelo_planiilha = CTkButton(master=self.frame_principal, text='Gerar modelo de planilha', font=('Arial', 15, 'bold'), width=239, height=35, fg_color='#235D34', border_color="#72A782", border_width=2, hover_color="#33844B", command=gerar_modelo_planilha)
+        self.btn_gerar_modelo_planiilha.place(relx=0.036, rely=0.620)
+
         # RadioButtons
         self.rb_modo = StringVar()
 
