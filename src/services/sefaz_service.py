@@ -35,10 +35,8 @@ class SefazBot:
             self.driver.get(site)
 
         except Exception as erro:
-
-            self.fechar_navegador()
-
             messagebox.showerror('Erro', f'Ocorreu um erro ao iniciar navegador:\n{erro}')
+            self.fechar_navegador()
 
     def digita_chave(self):
 
@@ -56,8 +54,8 @@ class SefazBot:
             WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Consultar')]"))).click()
 
         except Exception as erro:
-            self.fechar_navegador()
             messagebox.showerror(f'Ocorreu um erro:\n{erro}')
+            self.fechar_navegador()
 
     def coleta_dados(self):
 
