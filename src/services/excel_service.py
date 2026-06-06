@@ -1,42 +1,71 @@
-import os
-import pyautogui
-import pandas as pd
+from copy import copy
+from openpyxl import load_workbook
+from openpyxl.styles import Alignment
+from openpyxl.utils.cell import coordinate_from_string, column_index_from_string
 from tkinter import messagebox
-from utils.funcs import validar_planilha
+from config.config_manager import load_config
+
+config = load_config()
+
 
 class ExcelBot:
 
-    # Carrega os dados do CSV da nota fiscal
-    def __init__(self, chave):
-        self.caminho_csv = f'data/notas_fiscais/nf_{chave[:44]}.csv'
+    def __init__(self, dados):
+        self.dados = dados
 
-        if not os.path.exists(self.caminho_csv):
-            messagebox.showerror('Erro', 'Arquivo CSV não encontrado. Certifique-se de que a coleta de dados foi realizada com sucesso.')
-            raise FileNotFoundError(f'Arquivo {self.caminho_csv} não encontrado.')
+    def inserir_no_excel(self, caminho_excel, celula_inicial):
 
-        self.dados = pd.read_csv(self.caminho_csv)
-
-    # Posiciona o cursor na célula inicial
-    def celula_inicial(self, celula):
-        pyautogui.hotkey('alt', 'tab')
-        pyautogui.hotkey('ctrl', 'g')
-        pyautogui.write(celula)
-        pyautogui.press('enter')
-
-    # Insere os dados do CSV na planilha
-    def inserir_no_excel(self, planilha_buscada):
         try:
-            planilha_atual = validar_planilha(planilha_buscada)
+            wb = load_workbook(caminho_excel)
 
-            if not planilha_atual:
+            nome_aba = config['nome_planilha']
+
+            if nome_aba not in wb.sheetnames:
+                messagebox.showerror('Erro', 'Planilha não encontrada.')
                 return
 
-            for dados_linha in self.dados.values:
-                for valor in dados_linha:
-                    pyautogui.write(str(valor))
-                    pyautogui.press('tab')
+            ws = wb[nome_aba]
 
-                pyautogui.press('enter')
+            coluna_letra, linha_excel = coordinate_from_string(celula_inicial)
 
-        except Exception:
-            messagebox.showerror('Erro', 'Ocorreu um erro ao inserir os dados no Excel.')
+            coluna_inicial = column_index_from_string(coluna_letra)
+
+            for linha in self.dados:
+
+                coluna_excel = coluna_inicial
+
+                valores = [
+                    linha['data'],
+                    linha['estabelecimento'],
+                    linha['produto'],
+                    linha['grandeza'],
+                    linha['quantidade_comprada'],
+                    linha['valor_unitario'],
+                    linha['quantidade'],
+                    linha['valor_total']
+                ]
+
+                for valor in valores:
+                    celula = ws.cell(row=linha_excel, column=coluna_excel, value=valor)
+                    celula._style = copy(ws.cell(row=2,column=coluna_excel)._style)
+                    celula.alignment = Alignment(horizontal='center', vertical='center')
+
+                    if coluna_excel in [6, 8]:
+                        celula.number_format = 'R$ #,##0.00'
+
+                    elif coluna_excel == 7:
+                        celula.number_format = '0.000'
+
+                    coluna_excel += 1
+
+                linha_excel += 1
+
+            wb.save(caminho_excel)
+
+            messagebox.showinfo('Sucesso', 'Dados inseridos com sucesso!')
+
+        except Exception as erro:
+            messagebox.showerror('Erro', f'Ocorreu um erro:\n{erro}')
+
+if __name__ == "__main__":
+    excel = ExcelBot()
