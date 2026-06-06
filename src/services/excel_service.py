@@ -17,7 +17,6 @@ class ExcelBot:
 
         try:
             wb = load_workbook(caminho_excel)
-
             nome_aba = config['nome_planilha']
 
             if nome_aba not in wb.sheetnames:
@@ -25,13 +24,10 @@ class ExcelBot:
                 return
 
             ws = wb[nome_aba]
-
             coluna_letra, linha_excel = coordinate_from_string(celula_inicial)
-
             coluna_inicial = column_index_from_string(coluna_letra)
 
             for linha in self.dados:
-
                 coluna_excel = coluna_inicial
 
                 valores = [
@@ -66,6 +62,3 @@ class ExcelBot:
 
         except Exception as erro:
             messagebox.showerror('Erro', f'Ocorreu um erro:\n{erro}')
-
-if __name__ == "__main__":
-    excel = ExcelBot()
