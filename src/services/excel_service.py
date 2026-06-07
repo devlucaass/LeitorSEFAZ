@@ -1,36 +1,30 @@
-from copy import copy
-from openpyxl import load_workbook
-from openpyxl.styles import Alignment
-from openpyxl.utils.cell import coordinate_from_string, column_index_from_string
+import xlwings as xw
 from tkinter import messagebox
 from config.config_manager import load_config
 
 config = load_config()
 
-
 class ExcelBot:
 
     def __init__(self, dados):
         self.dados = dados
+        self.caminho_excel = config['caminho_excel']
 
-    def inserir_no_excel(self, caminho_excel, celula_inicial):
+    def inserir_no_excel(self, celula_inicial):
 
         try:
-            wb = load_workbook(caminho_excel)
+            wb = xw.Book(self.caminho_excel)
             nome_aba = config['nome_planilha']
 
-            if nome_aba not in wb.sheetnames:
-                messagebox.showerror('Erro', 'Planilha não encontrada.')
+            try:
+                ws = wb.sheets[nome_aba]
+
+            except Exception:
+                messagebox.showerror('Erro', f'A planilha "{nome_aba}" não foi encontrada.')
                 return
 
-            ws = wb[nome_aba]
-            coluna_letra, linha_excel = coordinate_from_string(celula_inicial)
-            coluna_inicial = column_index_from_string(coluna_letra)
-
-            for linha in self.dados:
-                coluna_excel = coluna_inicial
-
-                valores = [
+            matriz = [
+                [
                     linha['data'],
                     linha['estabelecimento'],
                     linha['produto'],
@@ -40,23 +34,12 @@ class ExcelBot:
                     linha['quantidade'],
                     linha['valor_total']
                 ]
+                for linha in self.dados
+            ]
 
-                for valor in valores:
-                    celula = ws.cell(row=linha_excel, column=coluna_excel, value=valor)
-                    celula._style = copy(ws.cell(row=2,column=coluna_excel)._style)
-                    celula.alignment = Alignment(horizontal='center', vertical='center')
+            ws.range(celula_inicial).value = matriz
 
-                    if coluna_excel in [6, 8]:
-                        celula.number_format = 'R$ #,##0.00'
-
-                    elif coluna_excel == 7:
-                        celula.number_format = '0.000'
-
-                    coluna_excel += 1
-
-                linha_excel += 1
-
-            wb.save(caminho_excel)
+            wb.save()
 
             messagebox.showinfo('Sucesso', 'Dados inseridos com sucesso!')
 
