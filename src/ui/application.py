@@ -31,7 +31,10 @@ class Application:
     def widgets(self):
         # Imagens
         img_qrcode = Image.open('assets/images/qrcode.png')
+        img_gear = Image.open('assets/images/gear.png')
+
         self.img_qrcode = CTkImage(light_image=img_qrcode, dark_image=img_qrcode, size=(35,35))
+        self.img_gear = CTkImage(light_image=img_gear, dark_image=img_gear, size=(20,20))
 
         # Labels
         self.lb_autoria = CTkLabel(master=self.frame_principal, text='Desenvolvido por Lucas Vinícius', font=('Arial', 12, 'bold'))
@@ -69,6 +72,9 @@ class Application:
 
         self.btn_gerar_modelo_planiilha = CTkButton(master=self.frame_principal, text='Gerar modelo de planilha', font=('Arial', 15, 'bold'), width=239, height=35, fg_color='#235D34', border_color="#72A782", border_width=2, hover_color="#33844B", command=gerar_modelo_planilha)
         self.btn_gerar_modelo_planiilha.place(relx=0.242, rely=0.700)
+
+        self.btn_configuracoes = CTkButton(master=self.frame_principal, text='', font=('Arial', 15, 'bold'), width=30, height=30, fg_color='#235D34', border_color="#72A782", border_width=2, hover_color="#33844B", image=self.img_gear, compound='left', command=abrir_configuracoes)
+        self.btn_configuracoes.place(relx=0.910, rely=0.920)
 
     def limpar_erros(self):
         self.lb_erro_celula.configure(text='')
