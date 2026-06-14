@@ -1,9 +1,14 @@
 from re import match
 
 def valida_chave(chave):
-        if len(chave) == 44:
-            return chave.strip()
+    chave = str(chave).strip()
+
+    return len(chave) == 44 and chave.isdigit()
 
 def valida_celula(celula):
-        if match(r'^[a-zA-Z]{1,3}[0-9]+$', celula):
-            return str(celula).strip().upper()
+    celula = str(celula).strip()
+
+    if match(r'^[A-Za-z]{1,3}[0-9]+$', celula):
+        return celula.upper()
+
+    return None
