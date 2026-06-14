@@ -2,19 +2,18 @@ import xlwings as xw
 from tkinter import messagebox
 from config.config_manager import load_config
 
-config = load_config()
-
 class ExcelBot:
 
     def __init__(self, dados):
         self.dados = dados
-        self.caminho_excel = config['caminho_excel']
+        self.config = load_config()
+        self.caminho_excel = self.config['caminho_excel']
 
     def inserir_no_excel(self, celula_inicial):
 
         try:
             wb = xw.Book(self.caminho_excel)
-            nome_aba = config['nome_planilha']
+            nome_aba = self.config['nome_planilha']
 
             try:
                 ws = wb.sheets[nome_aba]
