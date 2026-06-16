@@ -27,7 +27,7 @@ def gerar_modelo_planilha():
     ws = wb.active
     ws.title = 'CONSOLIDADO - COMPRAS'
 
-    colunas = ['PRODUTO', 'VALOR', 'ITENS', 'GRANDEZA', 'QUANTIDADE DE PRODUTO', 'VALOR UNITÁRIO', 'QUANTIDADE', 'TOTAL']
+    colunas = ['DATA', 'ESTABELECIMENTO', 'PRODUTO', 'GRANDEZA', 'QUANTIDADE P/ PRODUTO', 'VALOR UNITÁRIO', 'QUANTIDADE', 'TOTAL']
 
     ws.append(colunas)
 
