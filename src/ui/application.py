@@ -12,10 +12,10 @@ from customtkinter import (
     CTkImage
 )
 
-from config.config_manager import load_config
 from services.sefaz_service import SefazBot
 from services.excel_service import ExcelBot
 from utils.validators import valida_celula
+from config.config_manager import constants
 
 from utils.funcs import (
     abrir_configuracoes,
@@ -28,7 +28,6 @@ set_appearance_mode('dark')
 class Application:
     def __init__(self):
         self.root = CTk()
-        self.config = load_config()
         self.window()
         self.frame()
         self.widgets()
@@ -150,7 +149,7 @@ class Application:
             sefaz.configura_navegador(url, headless=True)
 
         else:
-            sefaz.configura_navegador(self.config['url_site'], headless=False)
+            sefaz.configura_navegador(constants.URL_SEFAZ, headless=False)
             sefaz.digita_chave()
 
         dados = sefaz.coleta_dados()
