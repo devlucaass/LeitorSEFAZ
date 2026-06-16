@@ -114,4 +114,4 @@ Desenvolvido por **Lucas Vinícius**
 
 ## Licença
 
-MIT
+Este projeto está licenciado sob a licença MIT. Consulte o arquivo LICENSE para mais detalhes.
