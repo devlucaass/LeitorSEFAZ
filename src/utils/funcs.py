@@ -74,7 +74,3 @@ def ler_qrcode():
     finally:
         cam.release()
         cv2.destroyAllWindows()
-
-if __name__ == '__main__':
-    abrir_configuracoes()
-    
