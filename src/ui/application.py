@@ -1,12 +1,27 @@
 import threading
+
 from PIL import Image
-from customtkinter import *
 from tkinter import messagebox
+from customtkinter import (
+    set_appearance_mode,
+    CTk,
+    CTkFrame,
+    CTkLabel,
+    CTkEntry,
+    CTkButton,
+    CTkImage
+)
+
 from config.config_manager import load_config
 from services.sefaz_service import SefazBot
 from services.excel_service import ExcelBot
 from utils.validators import valida_celula
-from utils.funcs import *
+
+from utils.funcs import (
+    abrir_configuracoes,
+    gerar_modelo_planilha,
+    ler_qrcode
+)
 
 set_appearance_mode('dark')
 
