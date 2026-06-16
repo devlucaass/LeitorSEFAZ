@@ -15,7 +15,7 @@ from customtkinter import (
 from services.sefaz_service import SefazBot
 from services.excel_service import ExcelBot
 from utils.validators import valida_celula
-from config.config_manager import constants
+from config.constants import URL_SEFAZ
 
 from utils.funcs import (
     abrir_configuracoes,
@@ -149,7 +149,7 @@ class Application:
             sefaz.configura_navegador(url, headless=True)
 
         else:
-            sefaz.configura_navegador(constants.URL_SEFAZ, headless=False)
+            sefaz.configura_navegador(URL_SEFAZ, headless=False)
             sefaz.digita_chave()
 
         dados = sefaz.coleta_dados()
