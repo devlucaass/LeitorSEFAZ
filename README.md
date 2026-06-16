@@ -110,7 +110,7 @@ A aplicação segue uma arquitetura simples baseada em separação de responsabi
 
 Desenvolvido por **Lucas Vinícius**
 
-- GitHub: https://github.com/devlucaass
+- GitHub: [@devlucaass](https://github.com/devlucaass)
 
 ## Licença
 
