@@ -19,7 +19,7 @@ def salvar_arquivo():
     caminho = filedialog.asksaveasfilename(
         initialfile='modelo_planilha.xlsx',
         defaultextension='.xlsx',
-        filetypes=[('Arquivos Excel', '*.xlsx'), ('Todos os arquivos', '*.*')],
+        filetypes=[('Arquivos Excel', '*.xlsx *.xlsm'), ('Todos os arquivos', '*.*')],
         title='Salvar modelo da planilha'
     )
 
