@@ -1,12 +1,19 @@
 import cv2
-import subprocess
 from pyzbar import pyzbar
 from openpyxl import Workbook
 from utils.validators import valida_chave
 from tkinter import messagebox, filedialog
 
-def abrir_configuracoes():
-    subprocess.Popen(['notepad.exe', 'src/config/settings.json'])
+def buscar_arquivo():
+    caminho = filedialog.askopenfilename(
+        title='Selecione uma planilha',
+        filetypes=[('Arquivos Excel', '*.xlsx')]
+    )
+
+    if not caminho:
+        return None
+
+    return caminho
 
 def salvar_arquivo():
     caminho = filedialog.asksaveasfilename(
