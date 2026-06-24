@@ -16,9 +16,9 @@ from services.sefaz_service import SefazBot
 from services.excel_service import ExcelBot
 from utils.validators import valida_celula
 from config.constants import URL_SEFAZ
+from ui.settings_window import SettingsWindow
 
 from utils.funcs import (
-    abrir_configuracoes,
     gerar_modelo_planilha,
     ler_qrcode
 )
@@ -63,7 +63,7 @@ class Application:
         self.lb_chave = CTkLabel(master=self.frame_principal, text='Chave da nota', font=('Arial', 18, 'bold'), text_color='white')
         self.lb_chave.place(relx=0.352, rely=0.300)
 
-        # Entrys
+        # Entries
         self.entry_celula = CTkEntry(master=self.frame_principal, placeholder_text='Informe a célula do Excel que deseja começar...', justify='center', width=300, fg_color='#235D34', border_color='#235D34')
         self.entry_celula.place(relx=0.18, rely=0.18)
 
@@ -87,8 +87,18 @@ class Application:
         self.btn_gerar_modelo_planiilha = CTkButton(master=self.frame_principal, text='Gerar modelo de planilha', font=('Arial', 15, 'bold'), width=239, height=35, fg_color='#235D34', border_color="#72A782", border_width=2, hover_color="#33844B", command=gerar_modelo_planilha)
         self.btn_gerar_modelo_planiilha.place(relx=0.242, rely=0.700)
 
-        self.btn_configuracoes = CTkButton(master=self.frame_principal, text='', font=('Arial', 15, 'bold'), width=30, height=30, fg_color='#235D34', border_color="#72A782", border_width=2, hover_color="#33844B", image=self.img_gear, compound='left', command=abrir_configuracoes)
+        self.btn_configuracoes = CTkButton(master=self.frame_principal, text='', font=('Arial', 15, 'bold'), width=30, height=30, fg_color='#235D34', border_color="#72A782", border_width=2, hover_color="#33844B", image=self.img_gear, compound='left', command=self.abrir_configuracoes)
         self.btn_configuracoes.place(relx=0.910, rely=0.920)
+
+    def abrir_configuracoes(self):
+        self.root.withdraw()
+
+        self.settings_window = SettingsWindow(self.root)
+        self.settings_window.protocol("WM_DELETE_WINDOW", self.fechar_configuracoes)
+
+    def fechar_configuracoes(self):
+        self.settings_window.destroy()
+        self.root.deiconify()
 
     def limpar_erros(self):
         self.lb_erro_celula.configure(text='')
