@@ -1,4 +1,5 @@
 from re import match
+from pathlib import Path
 
 def valida_chave(chave):
     chave = str(chave).strip()
@@ -12,3 +13,15 @@ def valida_celula(celula):
         return celula.upper()
 
     return None
+
+def valida_caminho_excel(caminho):
+    if not caminho:
+        return False
+    
+    arquivo = Path(caminho)
+    
+    return arquivo.exists() and arquivo.suffix.lower() in {'.xlsx', '.xlsm'}
+
+def valida_nome_planilha(nome_planilha):
+    return bool(nome_planilha.strip())
+
