@@ -1,3 +1,4 @@
+from tkinter import messagebox
 from customtkinter import (
     CTk,
     CTkToplevel,
@@ -7,8 +8,16 @@ from customtkinter import (
     CTkButton
 )
 
-from utils.funcs import buscar_arquivo
+from config.config_manager import (
+    load_config,
+    save_config
+)
 
+from utils.validators import (
+    valida_caminho_excel, valida_nome_planilha
+)
+
+from utils.funcs import buscar_arquivo
 class SettingsWindow(CTkToplevel):
 
     def __init__(self, master):
@@ -17,6 +26,7 @@ class SettingsWindow(CTkToplevel):
         self.window()
         self.frame()
         self.widgets()
+        self.carregar_configuracoes()
 
     def window(self):
         self.title('Painel de Configurações')
@@ -50,11 +60,17 @@ class SettingsWindow(CTkToplevel):
         self.entry_aba_planilha.place(relx=0.20, rely=0.360)
 
         # Buttons
-        self.btn_salvar_configuracoes = CTkButton(master=self.frame_principal, text='Salvar configurações', font=('Arial', 15, 'bold'), width=239, height=35, fg_color='#235D34', border_color="#72A782", border_width=2, hover_color="#33844B")
+        self.btn_salvar_configuracoes = CTkButton(master=self.frame_principal, text='Salvar configurações', font=('Arial', 15, 'bold'), width=239, height=35, fg_color='#235D34', border_color="#72A782", border_width=2, hover_color="#33844B", command=self.salvar_configuracoes)
         self.btn_salvar_configuracoes.place(relx=0.252, rely=0.500)
 
         self.btn_buscar_caminho_planilha = CTkButton(master=self.frame_principal, text='Localizar planilha', font=('Arial', 15, 'bold'), width=239, height=35, fg_color='#235D34', border_color="#72A782", border_width=2, hover_color="#33844B", command=self.selecionar_planilha)
         self.btn_buscar_caminho_planilha.place(relx=0.252, rely=0.600)
+
+    def carregar_configuracoes(self):
+        config = load_config()
+
+        self.entry_caminho_planilha.insert(0, config.get('caminho_excel', ''))
+        self.entry_aba_planilha.insert(0, config.get('nome_planilha', ''))
 
     def selecionar_planilha(self):
         caminho = buscar_arquivo()
@@ -62,6 +78,33 @@ class SettingsWindow(CTkToplevel):
         if caminho:
             self.entry_caminho_planilha.delete(0, 'end')
             self.entry_caminho_planilha.insert(0, caminho)
+
+
+    def salvar_configuracoes(self):
+        config = load_config()
+
+        caminho_excel = self.entry_caminho_planilha.get().strip()
+        nome_planilha = self.entry_aba_planilha.get().strip()
+
+        if caminho_excel:
+            if not valida_caminho_excel(caminho_excel):
+                messagebox.showerror('Erro', 'Informe um arquivo Excel válido.')
+                return
+
+            config['caminho_excel'] = caminho_excel
+
+        if nome_planilha:
+            if not valida_nome_planilha(nome_planilha):
+                messagebox.showerror('Erro', 'Informe um nome de planilha válido.')
+                return
+
+            config['nome_planilha'] = nome_planilha
+
+        save_config(config['caminho_excel'], config['nome_planilha'])
+
+        messagebox.showinfo('Sucesso', 'Configurações salvas com sucesso!')
+
+
         
 
 if __name__ == '__main__':
