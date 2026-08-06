@@ -28,13 +28,25 @@ def salvar_arquivo():
     
     return caminho
 
+from openpyxl import Workbook
+from tkinter import messagebox
+
 def gerar_modelo_planilha():
     wb = Workbook()
 
     ws = wb.active
     ws.title = 'CONSOLIDADO - COMPRAS'
 
-    colunas = ['DATA', 'ESTABELECIMENTO', 'PRODUTO', 'GRANDEZA', 'QUANTIDADE P/ PRODUTO', 'VALOR UNITÁRIO', 'QUANTIDADE', 'TOTAL']
+    colunas = [
+        'DATA',
+        'ESTABELECIMENTO',
+        'PRODUTO',
+        'GRANDEZA',
+        'QUANTIDADE P/ PRODUTO',
+        'VALOR UNITÁRIO',
+        'QUANTIDADE',
+        'TOTAL'
+    ]
 
     ws.append(colunas)
 
@@ -42,10 +54,12 @@ def gerar_modelo_planilha():
 
     if not caminho:
         return
-    
-    wb.save(caminho)
 
-    messagebox.showinfo('Sucesso', 'Modelo da planilha criado com sucesso!')
+    try:
+        wb.save(caminho)
+        messagebox.showinfo("Sucesso", "Modelo da planilha criado com sucesso!")
+    except PermissionError:
+        messagebox.showerror("Arquivo em uso", "Feche a planilha antes de gerar o modelo.")
 
 
 # Lê QRCodes e retorna seu valor em string.
