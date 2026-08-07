@@ -21,7 +21,7 @@ O LeitorSEFAZ foi desenvolvido para automatizar o processo de consulta de notas 
 
 - Chave de acesso
 - Data de emissão
-- Valor total da nota
+- Valor total dos itens
 - Informações do emitente
 
 ## Tecnologias Utilizadas
@@ -64,43 +64,14 @@ python src/main.py
 ## Como Utilizar
 
 1. Abra o programa
-2. Forneça a célula pela qual quer iniciar
-3. Leia o QR Code ou insira a chave da nota manualmente
-4. Exporte para o Excel (automático)
-
-## Estrutura do Projeto
-
-```text
-LeitorSEFAZ/
-├── assets/                 # Ícones e recursos visuais
-├── src/
-│   ├── config/             # Configurações da aplicação
-│   │   ├── settings.json
-│   │   └── config_manager.py
-│   │
-│   ├── services/           # Regras de negócio e automações
-│   │   ├── excel_service.py
-│   │   └── sefaz_service.py
-│   │
-│   ├── ui/                 # Interface gráfica
-│   │   └── application.py
-│   │
-│   ├── utils/              # Funções auxiliares e validações
-│   │   └── validators.py
-│   │
-│   └── main.py             # Ponto de entrada da aplicação
-│
-├── requirements.txt        # Dependências do projeto
-└── README.md               # Documentação
-```
-
-A aplicação segue uma arquitetura simples baseada em separação de responsabilidades:
-
-- **config**: gerenciamento das configurações do sistema.
-- **services**: comunicação com a SEFAZ e integração com Excel.
-- **ui**: interface gráfica desenvolvida com CustomTkinter.
-- **utils**: funções auxiliares e validações reutilizáveis.
-- **assets**: recursos visuais utilizados pela aplicação.
+2. Gere uma planilha modelo no botão "Gerar modelo de planilha"
+3. Salve a planilha modelo onde preferir
+4. Vá em configurações
+5. Clique em "Localizar planilha" e selecione ela
+6. Salve as configurações e feche a janela
+7. Forneça a célula pela qual quer iniciar
+8. Leia o QR Code ou insira a chave da nota manualmente
+9. Aguarde a planilha abrir sozinha ou deixe a planilha modelo aberta
 
 ## Status
 
