@@ -70,7 +70,7 @@ python src/main.py
 5. Clique em "Localizar planilha" e selecione ela
 6. Salve as configurações e feche a janela
 7. Forneça a célula pela qual quer iniciar
-8. Leia o QR Code ou insira a chave da nota manualmente
+8. Leia o QR Code ou insira a chave da nota manualmente (OBS.: se inserir manualmente, resolva o CAPTCHA do site)
 9. Aguarde a planilha abrir sozinha ou deixe a planilha modelo aberta
 
 ## Status
