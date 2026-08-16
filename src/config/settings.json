@@ -1,4 +1,4 @@
 {
-    "caminho_excel": "modelo_planilha.xlsx",
-    "nome_planilha": "CONSOLIDADO - COMPRAS"
+    "excel_path": "spreadsheet_template.xlsx",
+    "sheet_name": "CONSOLIDADO - COMPRAS"
 }
