@@ -28,6 +28,40 @@ class SefazClient:
         self._click_recaptcha()
         self._click_consult_button()
 
+    def collect_data(self):
+        try:
+            self._wait_for_results()
+
+            rows = self.driver.find_elements(By.CSS_SELECTOR, '#tabResult tbody tr')
+
+            date = self._get_issue_date()
+            establishment_name = self._get_establishment_name()
+
+            data = []
+
+            for row in rows:
+                if not row.find_elements(By.CLASS_NAME, 'txtTit'):
+                    continue
+
+                product_data = self._extract_product_data(row, date, establishment_name)
+
+                data.append(product_data)
+
+            return data
+
+        except Exception:
+            return []
+
+        finally:
+            self.close_browser()
+
+    def convert_to_number(self, value):
+        return float(value.replace('.', '').replace(',', '.'))
+
+    def close_browser(self):
+        if self.driver:
+            self.driver.quit()
+
     def _click_recaptcha(self):
         iframe = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, "//iframe[contains(@title,'reCAPTCHA')]")))
         self.driver.switch_to.frame(iframe)
@@ -82,36 +116,4 @@ class SefazClient:
             'total_price': total_price
         }
 
-    def collect_data(self):
-        try:
-            self._wait_for_results()
 
-            rows = self.driver.find_elements(By.CSS_SELECTOR, '#tabResult tbody tr')
-
-            date = self._get_issue_date()
-            establishment_name = self._get_establishment_name()
-
-            data = []
-
-            for row in rows:
-                if not row.find_elements(By.CLASS_NAME, 'txtTit'):
-                    continue
-
-                product_data = self._extract_product_data(row, date, establishment_name)
-
-                data.append(product_data)
-
-            return data
-
-        except Exception:
-            return []
-
-        finally:
-            self.close_browser()
-
-    def convert_to_number(self, value):
-        return float(value.replace('.', '').replace(',', '.'))
-
-    def close_browser(self):
-        if self.driver:
-            self.driver.quit()
