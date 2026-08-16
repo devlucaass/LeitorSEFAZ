@@ -10,24 +10,9 @@ class ExcelBot:
 
     def insert_data(self, start_cell):
         try:
-            wb = xw.Book(self.excel_path)
-            sheet_name = self.config['sheet_name']
-
-            ws = wb.sheets[sheet_name]
-
-            excel_values = [
-                [
-                    row['date'],
-                    row['establishment_name'],
-                    row['product'],
-                    row['unit'],
-                    row['purchased_quantity'],
-                    row['unit_price'],
-                    row['quantity'],
-                    row['total_price']
-                ]
-                for row in self.data
-            ]
+            wb = self._open_workbook()
+            ws = self._get_worksheet(wb)
+            excel_values = self._prepare_excel_values()
 
             ws.range(start_cell).value = excel_values
 
@@ -35,3 +20,27 @@ class ExcelBot:
             
         except Exception as e:
             print(f"Erro ao inserir dados no Excel: {e}")
+
+    def _open_workbook(self):
+        return xw.Book(self.excel_path)
+
+    def _get_worksheet(self, wb):
+        sheet_name = self.config['sheet_name']
+        return wb.sheets[sheet_name]
+
+    def _prepare_excel_values(self):
+        return [
+            [
+                row['date'],
+                row['establishment_name'],
+                row['product'],
+                row['unit'],
+                row['purchased_quantity'],
+                row['unit_price'],
+                row['quantity'],
+                row['total_price']
+            ]
+            for row in self.data
+        ]
+
+
