@@ -1,1 +1,0 @@
-URL_SEFAZ = 'https://nfce.sefaz.pe.gov.br/nfce/consulta'
