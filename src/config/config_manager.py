@@ -1,23 +1,27 @@
 import json
-from tkinter import messagebox
+from pathlib import Path
 
-CAMINHO_CONFIG = 'src/config/settings.json'
+class ConfigManager:
 
-def load_config():
-    try:
-        with open(CAMINHO_CONFIG, 'r', encoding='utf-8') as file:
-            return json.load(file)
+    SETTINGS_PATH = Path(__file__).parent / 'settings.json'
+
+    @staticmethod
+    def load_config():
+        try:
+            with open(ConfigManager.SETTINGS_PATH, 'r', encoding='utf-8') as file:
+                return json.load(file)
+            
+        except Exception as e:
+            print(f"Erro ao carregar o arquivo de configuração: {e}.")
+            return {}
         
-    except Exception:
-        messagebox.showerror('Erro', 'Arquivo de configuração com erros. Verifique e tente novamente.')
-        return {}
-    
-def save_config(caminho_excel, nome_planilha):
-    config = {
-        'caminho_excel': caminho_excel,
-        'nome_planilha': nome_planilha
-    }
-    
-    with open(CAMINHO_CONFIG, 'w', encoding='utf-8') as file:
-        json.dump(config, file, indent=4, ensure_ascii=False)
-    
+    @staticmethod
+    def save_config(excel_path, sheet_name):
+        config = {
+            'excel_path': excel_path,
+            'sheet_name': sheet_name,
+            'sefaz_url': "https://nfce.sefaz.pe.gov.br/nfce/consulta"
+        }
+        
+        with open(ConfigManager.SETTINGS_PATH, 'w', encoding='utf-8') as file:
+            json.dump(config, file, indent=4, ensure_ascii=False)
