@@ -58,7 +58,8 @@ class SefazClient:
         finally:
             self.close_browser()
 
-    def _convert_to_number(self, value):
+    @staticmethod
+    def _convert_to_number(value):
         return float(value.replace(".", "").replace(",", "."))
 
     def _close_browser(self):
@@ -122,18 +123,18 @@ class SefazClient:
 
         quantity = row.find_element(By.CLASS_NAME, "Rqtd").text
         quantity = quantity.replace("Qtde.:", "").strip()
-        quantity = self.convert_to_number(quantity)
+        quantity = self._convert_to_number(quantity)
 
         unit = row.find_element(By.CLASS_NAME, "RUN").text
         unit = unit.replace("UN:", "").strip()
 
         unit_price = row.find_element(By.CLASS_NAME, "RvlUnit").text
         unit_price = unit_price.split(":")[-1].strip()
-        unit_price = self.convert_to_number(unit_price)
+        unit_price = self._convert_to_number(unit_price)
 
         total_price = row.find_element(By.XPATH, "./td[2]").text
         total_price = total_price.split("\n")[-1].strip()
-        total_price = self.convert_to_number(total_price)
+        total_price = self._convert_to_number(total_price)
 
         return {
             "date": date,
