@@ -1,27 +1,32 @@
-from re import match
 from pathlib import Path
+from re import match
 
-def valida_chave(chave):
-    chave = str(chave).strip()
 
-    return len(chave) == 44 and chave.isdigit()
+class Validators:
+    @staticmethod
+    def validate_access_key(access_key):
+        access_key = str(access_key).strip()
 
-def valida_celula(celula):
-    celula = str(celula).strip()
+        return len(access_key) == 44 and access_key.isdigit()
 
-    if match(r'^[A-Za-z]{1,3}[0-9]+$', celula):
-        return celula.upper()
+    @staticmethod
+    def validate_excel_cell(excel_cell):
+        excel_cell = str(excel_cell).strip()
 
-    return None
+        if match(r"^[A-Za-z]{1,3}[0-9]+$", excel_cell):
+            return excel_cell.upper()
 
-def valida_caminho_excel(caminho):
-    if not caminho:
         return False
-    
-    arquivo = Path(caminho)
-    
-    return arquivo.exists() and arquivo.suffix.lower() in {'.xlsx', '.xlsm'}
 
-def valida_nome_planilha(nome_planilha):
-    return bool(nome_planilha.strip())
+    @staticmethod
+    def validate_excel_path(excel_path):
+        if not excel_path:
+            return False
 
+        file = Path(excel_path)
+
+        return file.exists() and file.suffix.lower() in {".xlsx", ".xlsm"}
+
+    @staticmethod
+    def validate_sheet_name(sheet_name):
+        return bool(sheet_name.strip())
