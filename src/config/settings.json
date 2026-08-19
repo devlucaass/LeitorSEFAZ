@@ -1,5 +1,4 @@
 {
     "excel_path": "spreadsheet_template.xlsx",
-    "sheet_name": "CONSOLIDADO - COMPRAS",
-    "sefaz_url": "https://nfce.sefaz.pe.gov.br/nfce/consulta"
+    "sheet_name": "CONSOLIDADO - COMPRAS"
 }
