@@ -56,7 +56,7 @@ class SefazClient:
             return []
 
         finally:
-            self.close_browser()
+            self._close_browser()
 
     @staticmethod
     def _convert_to_number(value):
