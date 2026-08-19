@@ -1,5 +1,5 @@
 from pathlib import Path
-from re import match
+from re import fullmatch
 
 
 class Validators:
@@ -7,13 +7,16 @@ class Validators:
     def validate_access_key(access_key):
         access_key = str(access_key).strip()
 
-        return len(access_key) == 44 and access_key.isdigit()
+        if fullmatch(r"\d{44}", access_key):
+            return access_key
+
+        return False
 
     @staticmethod
     def validate_excel_cell(excel_cell):
         excel_cell = str(excel_cell).strip()
 
-        if match(r"^[A-Za-z]{1,3}[0-9]+$", excel_cell):
+        if fullmatch(r"[A-Za-z]{1,3}[0-9]+", excel_cell):
             return excel_cell.upper()
 
         return False
