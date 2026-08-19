@@ -9,10 +9,9 @@ from config.constants import URL_SEFAZ
 
 
 class SefazClient:
-    def __init__(self, access_key):
+    def __init__(self):
         self.driver = None
         self.url_sefaz = URL_SEFAZ
-        self.access_key = access_key
 
     def configure_browser(self, URL_SEFAZ, headless=False):
         options = Options()
@@ -26,10 +25,10 @@ class SefazClient:
         self.driver.maximize_window()
         self.driver.get(URL_SEFAZ)
 
-    def enter_access_key(self):
+    def enter_access_key(self, access_key):
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.ID, "chave"))
-        ).send_keys(self.access_key)
+        ).send_keys(access_key)
         self._click_recaptcha()
         self._click_consult_button()
 
