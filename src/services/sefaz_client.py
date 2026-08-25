@@ -5,14 +5,12 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-from config.constants import URL_SEFAZ
-
 
 class SefazClient:
     def __init__(self):
         self.driver = None
 
-    def configure_browser(self, headless=False):
+    def configure_browser(self, url, headless=False):
         options = Options()
         options.set_preference("dom.webnotifications.enabled", False)
         options.set_preference("layout.css.devPixelsPerPx", "0.7")
@@ -22,7 +20,7 @@ class SefazClient:
 
         self.driver = webdriver.Firefox(options=options)
         self.driver.maximize_window()
-        self.driver.get(URL_SEFAZ)
+        self.driver.get(url)
 
     def enter_access_key(self, access_key):
         WebDriverWait(self.driver, 10).until(
