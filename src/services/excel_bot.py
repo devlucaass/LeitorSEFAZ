@@ -1,33 +1,67 @@
-import xlwings as xw
+import os
 
-from config.config_manager import load_config
+import xlwings as xw
+from openpyxl import Workbook, load_workbook
+
+from config.config_manager import ConfigManager
+from utils.funcs import save_file
 
 
 class ExcelBot:
     def __init__(self, data):
         self.data = data
-        self.config = load_config()
-        self.excel_path = self.config["excel_path"]
 
-    def insert_data(self, start_cell):
-        try:
-            wb = self._open_workbook()
-            ws = self._get_worksheet(wb)
-            excel_values = self._prepare_excel_values()
+    def insert_data(self, excel_cell):
+        wb = self._open_workbook()
+        ws = self._get_worksheet(wb)
+        excel_values = self._prepare_excel_values()
 
-            ws.range(start_cell).value = excel_values
+        ws.range(excel_cell).value = excel_values
 
-            wb.save()
+        wb.save()
 
-        except FileNotFoundError as e:
-            print(f"Erro ao inserir dados no Excel: {e}")
+    @staticmethod
+    def create_spreadsheet_template():
+        excel_path = save_file()
+
+        if not excel_path:
+            return
+
+        if os.path.exists(excel_path):
+            wb = load_workbook(excel_path)
+            ws = wb.active
+
+        else:
+            wb = Workbook()
+            ws = wb.active
+            ws.title = ConfigManager.load_config()['sheet_name']
+
+
+        ExcelBot._create_columns(ws)
+        wb.save(excel_path)
+
+
+    @staticmethod
+    def _create_columns(ws):
+        columns = [
+            "DATA",
+            "ESTABELECIMENTO",
+            "PRODUTO",
+            "GRANDEZA",
+            "QUANTIDADE P/ PRODUTO",
+            "VALOR UNITÁRIO",
+            "QUANTIDADE",
+            "TOTAL",
+        ]
+
+        for column, value in enumerate(columns, start=1):
+            ws.cell(row=1, column=column, value=value)
 
     def _open_workbook(self):
-        return xw.Book(self.excel_path)
+        return xw.Book(ConfigManager.load_config()['excel_path'])
 
     def _get_worksheet(self, wb):
-        sheet_name = self.config["sheet_name"]
-        return wb.sheets[sheet_name]
+        return wb.sheets[ConfigManager.load_config()['sheet_name']]
 
     def _prepare_excel_values(self):
         return [
@@ -43,3 +77,6 @@ class ExcelBot:
             ]
             for row in self.data
         ]
+
+
+
