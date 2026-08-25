@@ -11,9 +11,8 @@ from config.constants import URL_SEFAZ
 class SefazClient:
     def __init__(self):
         self.driver = None
-        self.url_sefaz = URL_SEFAZ
 
-    def configure_browser(self, URL_SEFAZ, headless=False):
+    def configure_browser(self, headless=False):
         options = Options()
         options.set_preference("dom.webnotifications.enabled", False)
         options.set_preference("layout.css.devPixelsPerPx", "0.7")
