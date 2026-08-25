@@ -1,11 +1,12 @@
 import cv2
-import pyzbar
+from pyzbar.pyzbar import decode
 
 from utils.validators import Validators
 
 
 class QRCode:
-    def read_qrcode(self):
+    @staticmethod
+    def read_qrcode():
         camera = cv2.VideoCapture(0)
 
         try:
@@ -15,28 +16,27 @@ class QRCode:
                 if not result:
                     break
 
-                qrcode = pyzbar.decode(frame)
+                qrcode = decode(frame)
 
                 for qr in qrcode:
                     url = qr.data.decode('utf-8')
-                    access_key = QRCode._extract_access_key()
+                    access_key = QRCode._extract_access_key(url)
 
                     if Validators.validate_access_key(access_key):
-                        return url
+                        return url, access_key
 
                     print(f'QR Code inválido: {url}')
-                    return False
+                    return None, None
 
                 cv2.imshow('Leitor de QRCode', frame)
 
-                
-                if cv2.waitKey(1) & 0xFF == 27:
+                if QRCode._is_exit_key():
                     break
 
-            return False
+            return None, None
 
         finally:
-            QRCode._close_camera()
+            QRCode._close_camera(camera)
 
 
     @staticmethod
@@ -47,4 +47,8 @@ class QRCode:
     def _close_camera(camera):
         camera.release()
         cv2.destroyAllWindows()
+
+    @staticmethod
+    def _is_exit_key():
+        return cv2.waitKey(1) & 0xFF == 27
 
