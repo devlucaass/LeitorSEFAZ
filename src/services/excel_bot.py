@@ -4,7 +4,7 @@ import xlwings as xw
 from openpyxl import Workbook, load_workbook
 
 from config.config_manager import ConfigManager
-from utils.funcs import save_file
+from utils.file_dialog import save_file
 
 
 class ExcelBot:
