@@ -1,5 +1,9 @@
 from customtkinter import CTkButton, CTkEntry, CTkFrame, CTkLabel, CTkToplevel
 
+from config.config_manager import ConfigManager
+from config.constants import APP_ICON_PATH
+from utils.file_dialog import select_file
+
 
 class SettingsWindow(CTkToplevel):
     def __init__(self, master):
@@ -13,7 +17,7 @@ class SettingsWindow(CTkToplevel):
 
     def windows(self):
         self.title("Painel de Configurações")
-        self.iconbitmap("assets/icons/logo.ico")
+        self.iconbitmap(APP_ICON_PATH)
         self.geometry("500x500")
         self.resizable(False, False)
 
@@ -75,8 +79,10 @@ class SettingsWindow(CTkToplevel):
         )
         self.entry_sheet_name.place(relx=0.20, rely=0.360)
 
+        self._load_config_values()
+
     def buttons(self):
-        self.btn_salvar_configuracoes = CTkButton(
+        self.btn_save_settings = CTkButton(
             master=self.main_frame,
             text="Salvar configurações",
             font=("Arial", 15, "bold"),
@@ -85,9 +91,10 @@ class SettingsWindow(CTkToplevel):
             fg_color="#235D34",
             border_color="#72A782",
             border_width=2,
-            hover_color="#33844B"
+            hover_color="#33844B",
+            command=self._save_settings
         )
-        self.btn_salvar_configuracoes.place(relx=0.252, rely=0.500)
+        self.btn_save_settings.place(relx=0.252, rely=0.500)
 
         self.btn_select_spreadsheet = CTkButton(
             master=self.main_frame,
@@ -98,6 +105,29 @@ class SettingsWindow(CTkToplevel):
             fg_color="#235D34",
             border_color="#72A782",
             border_width=2,
-            hover_color="#33844B"
+            hover_color="#33844B",
+            command=self._select_spreadsheet
         )
         self.btn_select_spreadsheet.place(relx=0.252, rely=0.600)
+
+    def _load_config_values(self):
+        self.entry_excel_path.insert(0, ConfigManager.load_config()['excel_path'])
+        self.entry_sheet_name.insert(0, ConfigManager.load_config()['sheet_name'])
+
+    def _select_spreadsheet(self):
+        excel_path = select_file()
+
+        if not excel_path:
+            return
+
+        self.entry_excel_path.delete(0, 'end')
+        self.entry_excel_path.insert(0, excel_path)
+
+    def _save_settings(self):
+        excel_path = self.entry_excel_path.get()
+        sheet_name = self.entry_sheet_name.get()
+
+        ConfigManager.save_config(excel_path, sheet_name)
+
+
+        
