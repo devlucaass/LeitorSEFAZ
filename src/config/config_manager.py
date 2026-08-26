@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+
 class ConfigManager:
 
     SETTINGS_PATH = Path(__file__).parent / 'settings.json'
@@ -20,7 +21,6 @@ class ConfigManager:
         config = {
             'excel_path': excel_path,
             'sheet_name': sheet_name,
-            'sefaz_url': "https://nfce.sefaz.pe.gov.br/nfce/consulta"
         }
         
         with open(ConfigManager.SETTINGS_PATH, 'w', encoding='utf-8') as file:
