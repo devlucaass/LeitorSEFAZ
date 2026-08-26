@@ -11,10 +11,16 @@ from customtkinter import (
 )
 from PIL import Image
 
-from config.constants import URL_SEFAZ
+from config.constants import (
+    APP_ICON_PATH,
+    GEAR_IMAGE_PATH,
+    QRCODE_IMAGE_PATH,
+    URL_SEFAZ,
+)
 from services.excel_bot import ExcelBot
 from services.sefaz_client import SefazClient
 from ui.settings_window import SettingsWindow
+from utils.qrcode import QRCode
 from utils.validators import Validators
 
 set_appearance_mode("dark")
@@ -23,16 +29,16 @@ set_appearance_mode("dark")
 class Application:
     def __init__(self):
         self.root = CTk()
-        self.window()
+        self.windows()
         self.frames()
         self.images()
         self.labels()
         self.entries()
         self.buttons()
 
-    def window(self):
+    def windows(self):
         self.root.title("Leitor de Notas Fiscais")
-        self.root.iconbitmap("assets/icons/logo.ico")
+        self.root.iconbitmap(APP_ICON_PATH)
         self.root.geometry("500x500")
         self.root.resizable(False, False)
 
@@ -43,8 +49,8 @@ class Application:
         self.main_frame.place(relx=0.02, rely=0.02, relwidth=0.96, relheight=0.96)
 
     def images(self):
-        img_qrcode = Image.open("assets/images/qrcode.png")
-        img_gear = Image.open("assets/images/gear.png")
+        img_qrcode = Image.open(QRCODE_IMAGE_PATH)
+        img_gear = Image.open(GEAR_IMAGE_PATH)
 
         self.img_qrcode = CTkImage(
             light_image=img_qrcode, dark_image=img_qrcode, size=(35, 35)
@@ -148,6 +154,7 @@ class Application:
             hover_color="#33844B",
             image=self.img_qrcode,
             compound="left",
+            command=self.start_qrcode,
         )
         self.btn_read_qrcode.place(relx=0.242, rely=0.600)
 
@@ -161,7 +168,7 @@ class Application:
             border_color="#72A782",
             border_width=2,
             hover_color="#33844B",
-            command=ExcelBot.create_spreadsheet_template
+            command=ExcelBot.create_spreadsheet_template,
         )
         self.btn_create_spreadsheet_template.place(relx=0.242, rely=0.700)
 
@@ -177,14 +184,19 @@ class Application:
             hover_color="#33844B",
             image=self.img_gear,
             compound="left",
+            command=self._open_window_settings,
         )
         self.btn_settings.place(relx=0.910, rely=0.920)
 
     def _open_window_settings(self):
-        self.root.withdraw()
-
         self.settings_window = SettingsWindow(self.root)
+
+        self.settings_window.transient(self.root)
+        self.settings_window.grab_set()
+
         self.settings_window.protocol("WM_DELETE_WINDOW", self._close_window_settings)
+
+        self.root.withdraw()
 
     def _close_window_settings(self):
         self.settings_window.destroy()
@@ -194,7 +206,7 @@ class Application:
         self.lb_error_excel_cell.configure(text="")
         self.lb_error_access_key.configure(text="")
 
-    def _validations(self):
+    def _validations(self, use_qrcode=False):
         self._clear_errors_messages()
 
         access_key = self._get_access_key_input()
@@ -208,7 +220,7 @@ class Application:
             )
             is_valid = False
 
-        if not Validators.validate_access_key(access_key):
+        if not use_qrcode and not Validators.validate_access_key(access_key):
             self.lb_error_access_key.configure(
                 text="Informe uma chave válida ou use o modo QRCode."
             )
@@ -222,11 +234,14 @@ class Application:
     def _get_excel_cell_input(self):
         return self.entry_excel_cell.get()
 
-    def _run_sefaz(self, access_key):
+    def _run_sefaz(self, access_key, url=None):
         sefaz_client = SefazClient()
 
-        sefaz_client.configure_browser(URL_SEFAZ, headless=False)
-        sefaz_client.enter_access_key(access_key)
+        if url:
+            sefaz_client.configure_browser(url, headless=True)
+        else:
+            sefaz_client.configure_browser(URL_SEFAZ, headless=False)
+            sefaz_client.enter_access_key(access_key)
 
         return sefaz_client.collect_data()
 
@@ -245,6 +260,21 @@ class Application:
 
         self._run_excel(data, excel_cell)
 
+    def _run_qrcode_process(self, excel_cell):
+        url, access_key = QRCode.read_qrcode()
+
+        if not url:
+            return
+
+        access_key = QRCode._extract_access_key(url)
+
+        data = self._run_sefaz(access_key, url)
+
+        if not data:
+            return
+
+        self._run_excel(data, excel_cell)
+
     def start(self):
         if not self._validations():
             return
@@ -254,6 +284,16 @@ class Application:
 
         self._start_thread(self._run_process, args=(access_key, excel_cell))
 
+    def start_qrcode(self):
+        if not self._validations(use_qrcode=True):
+            return
+
+        excel_cell = self._get_excel_cell_input()
+
+        if not Validators.validate_excel_cell(excel_cell):
+            return
+
+        self._start_thread(self._run_qrcode_process, args=(excel_cell,))
 
     def run(self):
         self.root.mainloop()
