@@ -1,27 +1,38 @@
 import json
 from pathlib import Path
 
+from config.constants import EXCEL_PATH_KEY, SHEET_NAME_KEY
+
 
 class ConfigManager:
+    SETTINGS_PATH = Path(__file__).parent / "settings.json"
 
-    SETTINGS_PATH = Path(__file__).parent / 'settings.json'
-
-    @staticmethod
-    def load_config():
+    @classmethod
+    def load_config(cls) -> dict:
         try:
-            with open(ConfigManager.SETTINGS_PATH, 'r', encoding='utf-8') as file:
-                return json.load(file)
-            
-        except Exception as e:
-            print(f"Erro ao carregar o arquivo de configuração: {e}.")
+            with cls.SETTINGS_PATH.open("r", encoding="utf-8") as file:
+                config = json.load(file)
+
+            if isinstance(config, dict):
+                return config
+
             return {}
-        
-    @staticmethod
-    def save_config(excel_path, sheet_name):
+
+        except (FileNotFoundError, json.JSONDecodeError):
+            return {}
+
+    @classmethod
+    def save_config(cls, excel_path: str, sheet_name: str) -> bool:
         config = {
-            'excel_path': excel_path,
-            'sheet_name': sheet_name,
+            EXCEL_PATH_KEY: excel_path,
+            SHEET_NAME_KEY: sheet_name,
         }
-        
-        with open(ConfigManager.SETTINGS_PATH, 'w', encoding='utf-8') as file:
-            json.dump(config, file, indent=4, ensure_ascii=False)
+
+        try:
+            with cls.SETTINGS_PATH.open("w", encoding="utf-8") as file:
+                json.dump(config, file, indent=4, ensure_ascii=False)
+
+            return True
+
+        except OSError:
+            return False
