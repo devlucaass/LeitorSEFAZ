@@ -11,7 +11,7 @@ class SettingsWindow(CTkToplevel):
     def __init__(self, master):
         super().__init__(master)
 
-        self.windows()
+        self.window()
         self.frames()
         self.labels()
         self.entries()
