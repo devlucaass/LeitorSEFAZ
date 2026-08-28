@@ -1,5 +1,5 @@
 import cv2
-from pyzbar.pyzbar import decode
+from pyzbar.pyzbar import ZBarSymbol, decode
 
 from utils.validators import Validators
 
@@ -19,7 +19,7 @@ class QRCode:
                 if not result:
                     break
 
-                decoded_qrcodes = decode(frame)
+                decoded_qrcodes = decode(frame, symbols=[ZBarSymbol.QRCODE])
 
                 for qr in decoded_qrcodes:
                     url = qr.data.decode('utf-8')
