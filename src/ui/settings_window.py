@@ -18,7 +18,7 @@ class SettingsWindow(CTkToplevel):
         self.buttons()
         self._load_config_values()
 
-    def windows(self):
+    def window(self):
         self.title("Painel de Configurações")
         self.iconbitmap(APP_ICON_PATH)
         self.geometry("500x500")
