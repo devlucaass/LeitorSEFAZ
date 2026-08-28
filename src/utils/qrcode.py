@@ -9,6 +9,9 @@ class QRCode:
     def read_qrcode():
         camera = cv2.VideoCapture(0)
 
+        if not camera.isOpened():
+            return None, None
+
         try:
             while True:
                 result, frame = camera.read()
@@ -16,16 +19,18 @@ class QRCode:
                 if not result:
                     break
 
-                qrcode = decode(frame)
+                decoded_qrcodes = decode(frame)
 
-                for qr in qrcode:
+                for qr in decoded_qrcodes:
                     url = qr.data.decode('utf-8')
                     access_key = QRCode._extract_access_key(url)
+
+                    if not access_key:
+                        return None, None
 
                     if Validators.validate_access_key(access_key):
                         return url, access_key
 
-                    print(f'QR Code inválido: {url}')
                     return None, None
 
                 cv2.imshow('Leitor de QRCode', frame)
@@ -40,8 +45,11 @@ class QRCode:
 
 
     @staticmethod
-    def _extract_access_key(value):
-        return value.split('p=')[-1].split('|')[0]
+    def _extract_access_key(url):
+        if "p=" not in url:
+            return None
+
+        return url.split('p=')[-1].split('|')[0]
 
     @staticmethod
     def _close_camera(camera):
