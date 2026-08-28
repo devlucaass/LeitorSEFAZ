@@ -4,6 +4,7 @@ import xlwings as xw
 from openpyxl import Workbook, load_workbook
 
 from config.config_manager import ConfigManager
+from config.constants import EXCEL_PATH_KEY, SHEET_NAME_KEY
 from utils.file_dialog import save_file
 
 
@@ -12,34 +13,55 @@ class ExcelBot:
         self.data = data
 
     def insert_data(self, excel_cell):
-        wb = self._open_workbook()
-        ws = self._get_worksheet(wb)
-        excel_values = self._prepare_excel_values()
+        try:
+            config = ConfigManager.load_config()
 
-        ws.range(excel_cell).value = excel_values
+            excel_path = config.get(EXCEL_PATH_KEY)
+            sheet_name = config.get(SHEET_NAME_KEY)
 
-        wb.save()
+            if not excel_path or not sheet_name:
+                return False
+
+            wb = self._open_workbook(excel_path)
+            ws = self._get_worksheet(wb, sheet_name)
+
+            excel_values = self._prepare_excel_values()
+
+            ws.range(excel_cell).value = excel_values
+
+            wb.save()
+
+            return True
+
+        except (FileNotFoundError, KeyError, PermissionError, OSError):
+            return False
 
     @staticmethod
     def create_spreadsheet_template():
-        excel_path = save_file()
+        try:
+            config = ConfigManager.load_config()
 
-        if not excel_path:
-            return
+            excel_path = save_file()
 
-        if os.path.exists(excel_path):
-            wb = load_workbook(excel_path)
-            ws = wb.active
+            if not excel_path:
+                return False
 
-        else:
-            wb = Workbook()
-            ws = wb.active
-            ws.title = ConfigManager.load_config()['sheet_name']
+            if os.path.exists(excel_path):
+                wb = load_workbook(excel_path)
+                ws = wb.active
 
+            else:
+                wb = Workbook()
+                ws = wb.active
+                ws.title = config[SHEET_NAME_KEY]
 
-        ExcelBot._create_columns(ws)
-        wb.save(excel_path)
+            ExcelBot._create_columns(ws)
+            wb.save(excel_path)
 
+            return True
+
+        except (PermissionError, KeyError, OSError):
+            return False
 
     @staticmethod
     def _create_columns(ws):
@@ -57,11 +79,11 @@ class ExcelBot:
         for column, value in enumerate(columns, start=1):
             ws.cell(row=1, column=column, value=value)
 
-    def _open_workbook(self):
-        return xw.Book(ConfigManager.load_config()['excel_path'])
+    def _open_workbook(self, excel_path):
+        return xw.Book(excel_path)
 
-    def _get_worksheet(self, wb):
-        return wb.sheets[ConfigManager.load_config()['sheet_name']]
+    def _get_worksheet(self, wb, sheet_name):
+        return wb.sheets[sheet_name]
 
     def _prepare_excel_values(self):
         return [
@@ -77,6 +99,3 @@ class ExcelBot:
             ]
             for row in self.data
         ]
-
-
-
