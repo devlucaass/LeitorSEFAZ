@@ -1,5 +1,9 @@
 from selenium import webdriver
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import (
+    NoSuchElementException,
+    TimeoutException,
+    WebDriverException,
+)
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support import expected_conditions as EC
@@ -17,17 +21,29 @@ class SefazClient:
 
         if headless:
             options.add_argument("--headless")
+        try:
+            self.driver = webdriver.Firefox(options=options)
+            self.driver.maximize_window()
+            self.driver.get(url)
 
-        self.driver = webdriver.Firefox(options=options)
-        self.driver.maximize_window()
-        self.driver.get(url)
+            return True
+
+        except WebDriverException:
+            self._close_browser()
+            return False
 
     def enter_access_key(self, access_key):
-        WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.ID, "chave"))
-        ).send_keys(access_key)
-        self._click_recaptcha()
-        self._click_consult_button()
+        try:
+            WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.ID, "chave"))
+            ).send_keys(access_key)
+            self._click_recaptcha()
+            self._click_consult_button()
+
+            return True
+
+        except (TimeoutException, NoSuchElementException, WebDriverException):
+            return False
 
     def collect_data(self):
         try:
@@ -50,8 +66,12 @@ class SefazClient:
 
             return data
 
-        except TimeoutException as e:
-            print(f"Erro ao coletar dados: {e}")
+        except (
+            TimeoutException,
+            NoSuchElementException,
+            WebDriverException,
+            ValueError,
+        ):
             return []
 
         finally:
