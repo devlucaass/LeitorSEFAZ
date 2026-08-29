@@ -1,4 +1,5 @@
 import threading
+from tkinter import messagebox
 
 from customtkinter import (
     CTk,
@@ -29,14 +30,14 @@ set_appearance_mode("dark")
 class Application:
     def __init__(self):
         self.root = CTk()
-        self.windows()
+        self.window()
         self.frames()
         self.images()
         self.labels()
         self.entries()
         self.buttons()
 
-    def windows(self):
+    def window(self):
         self.root.title("Leitor de Notas Fiscais")
         self.root.iconbitmap(APP_ICON_PATH)
         self.root.geometry("500x500")
@@ -238,16 +239,37 @@ class Application:
         sefaz_client = SefazClient()
 
         if url:
-            sefaz_client.configure_browser(url, headless=True)
+            if not sefaz_client.configure_browser(url, headless=True):
+                messagebox.showerror(
+                    "Erro", "Verifique sua conexão com a internet e tente novamente."
+                )
+                return []
         else:
-            sefaz_client.configure_browser(URL_SEFAZ, headless=False)
-            sefaz_client.enter_access_key(access_key)
+            if not sefaz_client.configure_browser(URL_SEFAZ):
+                messagebox.showerror(
+                    "Erro", "Verifique sua conexão com a internet e tente novamente."
+                )
+                return []
+
+            if not sefaz_client.enter_access_key(access_key):
+                messagebox.showerror(
+                    "Erro", "Não foi possível realizar a consulta da nota fiscal."
+                )
+                return []
 
         return sefaz_client.collect_data()
 
     def _run_excel(self, data, excel_cell):
         excel_bot = ExcelBot(data)
-        excel_bot.insert_data(excel_cell)
+
+        if not excel_bot.insert_data(excel_cell):
+            messagebox.showerror(
+                "Erro", "Não foi possível inserir os dados na planilha."
+            )
+
+            return
+
+        messagebox.showinfo("Sucesso", "Dados inseridos com sucesso!")
 
     def _start_thread(self, target, args=()):
         threading.Thread(target=target, args=args, daemon=True).start()
@@ -256,6 +278,8 @@ class Application:
         data = self._run_sefaz(access_key)
 
         if not data:
+            messagebox.showerror("Erro", "Não foi possível obter dados da nota fiscal.")
+
             return
 
         self._run_excel(data, excel_cell)
@@ -266,11 +290,10 @@ class Application:
         if not url:
             return
 
-        access_key = QRCode._extract_access_key(url)
-
         data = self._run_sefaz(access_key, url)
 
         if not data:
+            messagebox.showerror("Erro", "Não foi possível obter dados da nota fiscal.")
             return
 
         self._run_excel(data, excel_cell)
@@ -278,6 +301,8 @@ class Application:
     def start(self):
         if not self._validations():
             return
+
+        messagebox.showinfo("Iniciando", "Clique em OK para prosseguir...")
 
         access_key = self._get_access_key_input()
         excel_cell = self._get_excel_cell_input()
@@ -289,9 +314,6 @@ class Application:
             return
 
         excel_cell = self._get_excel_cell_input()
-
-        if not Validators.validate_excel_cell(excel_cell):
-            return
 
         self._start_thread(self._run_qrcode_process, args=(excel_cell,))
 
