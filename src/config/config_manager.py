@@ -26,7 +26,7 @@ class ConfigManager:
         config = {
             EXCEL_PATH_KEY: excel_path,
             SHEET_NAME_KEY: sheet_name,
-            BROWSER_NAME_KEY: browser_name.lower()
+            BROWSER_NAME_KEY: browser_name
         }
 
         try:
