@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from config.constants import EXCEL_PATH_KEY, SHEET_NAME_KEY
+from config.constants import BROWSER_NAME_KEY, EXCEL_PATH_KEY, SHEET_NAME_KEY
 
 
 class ConfigManager:
@@ -22,10 +22,11 @@ class ConfigManager:
             return {}
 
     @classmethod
-    def save_config(cls, excel_path: str, sheet_name: str) -> bool:
+    def save_config(cls, excel_path: str, sheet_name: str, browser_name: str) -> bool:
         config = {
             EXCEL_PATH_KEY: excel_path,
             SHEET_NAME_KEY: sheet_name,
+            BROWSER_NAME_KEY: browser_name.lower()
         }
 
         try:
