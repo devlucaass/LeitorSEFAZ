@@ -1,6 +1,13 @@
 from tkinter import messagebox
 
-from customtkinter import CTkButton, CTkEntry, CTkFrame, CTkLabel, CTkToplevel
+from customtkinter import (
+    CTkButton,
+    CTkComboBox,
+    CTkEntry,
+    CTkFrame,
+    CTkLabel,
+    CTkToplevel,
+)
 
 from config.config_manager import ConfigManager
 from config.constants import APP_ICON_PATH, EXCEL_PATH_KEY, SHEET_NAME_KEY
@@ -15,6 +22,7 @@ class SettingsWindow(CTkToplevel):
         self.frames()
         self.labels()
         self.entries()
+        self.comboboxes()
         self.buttons()
         self._load_config_values()
 
@@ -26,10 +34,7 @@ class SettingsWindow(CTkToplevel):
 
     def frames(self):
         self.main_frame = CTkFrame(
-            master=self,
-            fg_color="#32a14f",
-            border_color="#75d58f",
-            border_width=3
+            master=self, fg_color="#32a14f", border_color="#75d58f", border_width=3
         )
         self.main_frame.place(relx=0.02, rely=0.02, relwidth=0.96, relheight=0.96)
 
@@ -50,11 +55,11 @@ class SettingsWindow(CTkToplevel):
 
         self.lb_excel_path = CTkLabel(
             master=self.main_frame,
-            text="Nome do arquivo",
+            text="Caminho do arquivo",
             font=("Arial", 18, "bold"),
             text_color="white",
         )
-        self.lb_excel_path.place(relx=0.350, rely=0.12)
+        self.lb_excel_path.place(relx=0.322, rely=0.12)
 
         self.lb_sheet_name = CTkLabel(
             master=self.main_frame,
@@ -62,7 +67,15 @@ class SettingsWindow(CTkToplevel):
             font=("Arial", 18, "bold"),
             text_color="white",
         )
-        self.lb_sheet_name.place(relx=0.362, rely=0.300)
+        self.lb_sheet_name.place(relx=0.362, rely=0.265)
+
+        self.lb_browser = CTkLabel(
+            master=self.main_frame,
+            text="Navegador",
+            font=("Arial", 18, "bold"),
+            text_color="white",
+        )
+        self.lb_browser.place(relx=0.400, rely=0.410)
 
     def entries(self):
         self.entry_excel_path = CTkEntry(
@@ -73,7 +86,7 @@ class SettingsWindow(CTkToplevel):
             fg_color="#235D34",
             border_color="#235D34",
         )
-        self.entry_excel_path.place(relx=0.20, rely=0.18)
+        self.entry_excel_path.place(relx=0.20, rely=0.180)
 
         self.entry_sheet_name = CTkEntry(
             master=self.main_frame,
@@ -83,7 +96,28 @@ class SettingsWindow(CTkToplevel):
             fg_color="#235D34",
             border_color="#235D34",
         )
-        self.entry_sheet_name.place(relx=0.20, rely=0.360)
+        self.entry_sheet_name.place(relx=0.20, rely=0.325)
+
+    def comboboxes(self):
+        self.cb_browser = CTkComboBox(
+            master=self.main_frame,
+            values=["Firefox", "Chrome", "Edge"],
+            justify="center",
+            width=300,
+            fg_color="#235D34",
+            border_color="#235D34",
+            button_color="#235D34",
+            button_hover_color="#33844B",
+            dropdown_fg_color="#235D34",
+            dropdown_text_color="white",
+            dropdown_hover_color="#33844B",
+            text_color="#7BB38C",
+            state="readonly",
+            command=self._on_browser_selected,
+        )
+
+        self.cb_browser.set("Chrome")
+        self.cb_browser.place(relx=0.20, rely=0.470)
 
     def buttons(self):
         self.btn_save_settings = CTkButton(
@@ -98,7 +132,7 @@ class SettingsWindow(CTkToplevel):
             hover_color="#33844B",
             command=self._save_settings,
         )
-        self.btn_save_settings.place(relx=0.252, rely=0.500)
+        self.btn_save_settings.place(relx=0.252, rely=0.590)
 
         self.btn_select_spreadsheet = CTkButton(
             master=self.main_frame,
@@ -112,7 +146,10 @@ class SettingsWindow(CTkToplevel):
             hover_color="#33844B",
             command=self._select_spreadsheet,
         )
-        self.btn_select_spreadsheet.place(relx=0.252, rely=0.600)
+        self.btn_select_spreadsheet.place(relx=0.252, rely=0.675)
+
+    def _on_browser_selected(self, choice):
+        self.cb_browser.configure(text_color="white")
 
     def _load_config_values(self):
         config = ConfigManager.load_config()
@@ -135,8 +172,9 @@ class SettingsWindow(CTkToplevel):
     def _save_settings(self):
         excel_path = self.entry_excel_path.get()
         sheet_name = self.entry_sheet_name.get()
+        browser_name = self.cb_browser.get()
 
-        success = ConfigManager.save_config(excel_path, sheet_name)
+        success = ConfigManager.save_config(excel_path, sheet_name, browser_name)
 
         if success:
             messagebox.showinfo(
@@ -146,5 +184,5 @@ class SettingsWindow(CTkToplevel):
             messagebox.showerror(
                 "Não foi possível salvar",
                 "Não foi possível salvar suas configurações.\n"
-                "Verifique as informações e tente novamente."
+                "Verifique as informações e tente novamente.",
             )
