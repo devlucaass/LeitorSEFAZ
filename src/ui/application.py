@@ -45,19 +45,32 @@ class Application:
 
     def frames(self):
         self.main_frame = CTkFrame(
-            master=self.root, fg_color="#32a14f", border_color="#75d58f", border_width=3
+            master=self.root,
+            fg_color="#32a14f",
+            border_color="#75d58f",
+            border_width=3,
         )
-        self.main_frame.place(relx=0.02, rely=0.02, relwidth=0.96, relheight=0.96)
+        self.main_frame.place(
+            relx=0.02,
+            rely=0.02,
+            relwidth=0.96,
+            relheight=0.96,
+        )
 
     def images(self):
         img_qrcode = Image.open(QRCODE_IMAGE_PATH)
         img_gear = Image.open(GEAR_IMAGE_PATH)
 
         self.img_qrcode = CTkImage(
-            light_image=img_qrcode, dark_image=img_qrcode, size=(35, 35)
+            light_image=img_qrcode,
+            dark_image=img_qrcode,
+            size=(35, 35),
         )
+
         self.img_gear = CTkImage(
-            light_image=img_gear, dark_image=img_gear, size=(20, 20)
+            light_image=img_gear,
+            dark_image=img_gear,
+            size=(20, 20),
         )
 
     def labels(self):
@@ -169,7 +182,7 @@ class Application:
             border_color="#72A782",
             border_width=2,
             hover_color="#33844B",
-            command=ExcelBot.create_spreadsheet_template,
+            command=self._create_spreadsheet_template,
         )
         self.btn_create_spreadsheet_template.place(relx=0.242, rely=0.700)
 
@@ -195,7 +208,10 @@ class Application:
         self.settings_window.transient(self.root)
         self.settings_window.grab_set()
 
-        self.settings_window.protocol("WM_DELETE_WINDOW", self._close_window_settings)
+        self.settings_window.protocol(
+            "WM_DELETE_WINDOW",
+            self._close_window_settings,
+        )
 
         self.root.withdraw()
 
@@ -240,46 +256,68 @@ class Application:
 
         if url:
             if not sefaz_client.configure_browser(url, headless=True):
-                messagebox.showerror(
-                    "Erro", "Verifique sua conexão com a internet e tente novamente."
-                )
                 return []
+
         else:
             if not sefaz_client.configure_browser(URL_SEFAZ):
-                messagebox.showerror(
-                    "Erro", "Verifique sua conexão com a internet e tente novamente."
-                )
                 return []
 
             if not sefaz_client.enter_access_key(access_key):
-                messagebox.showerror(
-                    "Erro", "Não foi possível realizar a consulta da nota fiscal."
-                )
                 return []
 
         return sefaz_client.collect_data()
+
+    def _create_spreadsheet_template(self):
+        if not ExcelBot.create_spreadsheet_template():
+            messagebox.showerror(
+                "Erro",
+                "Não foi possível gerar o modelo de planilha.",
+            )
+            return
+
+        messagebox.showinfo(
+            "Sucesso",
+            "Modelo de planilha criado com sucesso!",
+        )
 
     def _run_excel(self, data, excel_cell):
         excel_bot = ExcelBot(data)
 
         if not excel_bot.insert_data(excel_cell):
-            messagebox.showerror(
-                "Erro", "Não foi possível inserir os dados na planilha."
+            self.root.after(
+                0,
+                lambda: messagebox.showerror(
+                    "Erro",
+                    "Não foi possível inserir os dados na planilha.",
+                ),
             )
-
             return
 
-        messagebox.showinfo("Sucesso", "Dados inseridos com sucesso!")
+        self.root.after(
+            0,
+            lambda: messagebox.showinfo(
+                "Sucesso",
+                "Dados inseridos com sucesso!",
+            ),
+        )
 
     def _start_thread(self, target, args=()):
-        threading.Thread(target=target, args=args, daemon=True).start()
+        threading.Thread(
+            target=target,
+            args=args,
+            daemon=True,
+        ).start()
 
-    def _run_process(self, access_key, excel_cell):
-        data = self._run_sefaz(access_key)
+    def _run_process(self, access_key, excel_cell, url=None):
+        data = self._run_sefaz(access_key, url)
 
         if not data:
-            messagebox.showerror("Erro", "Não foi possível obter dados da nota fiscal.")
-
+            self.root.after(
+                0,
+                lambda: messagebox.showerror(
+                    "Erro", "Não foi possível obter dados da nota fiscal."
+                ),
+            )
             return
 
         self._run_excel(data, excel_cell)
@@ -290,24 +328,24 @@ class Application:
         if not url:
             return
 
-        data = self._run_sefaz(access_key, url)
-
-        if not data:
-            messagebox.showerror("Erro", "Não foi possível obter dados da nota fiscal.")
-            return
-
-        self._run_excel(data, excel_cell)
+        self._run_process(access_key, excel_cell, url)
 
     def start(self):
         if not self._validations():
             return
 
-        messagebox.showinfo("Iniciando", "Clique em OK para prosseguir...")
+        messagebox.showinfo(
+            "Iniciando",
+            "Clique em OK para prosseguir...",
+        )
 
         access_key = self._get_access_key_input()
         excel_cell = self._get_excel_cell_input()
 
-        self._start_thread(self._run_process, args=(access_key, excel_cell))
+        self._start_thread(
+            self._run_process,
+            args=(access_key, excel_cell),
+        )
 
     def start_qrcode(self):
         if not self._validations(use_qrcode=True):
@@ -315,7 +353,10 @@ class Application:
 
         excel_cell = self._get_excel_cell_input()
 
-        self._start_thread(self._run_qrcode_process, args=(excel_cell,))
+        self._start_thread(
+            self._run_qrcode_process,
+            args=(excel_cell,),
+        )
 
     def run(self):
         self.root.mainloop()
