@@ -2,6 +2,18 @@
 
 Aplicação desktop desenvolvida em Python para consulta de notas fiscais através do portal da SEFAZ-PE. Os dados são coletados automaticamente e armazenados em uma planilha Excel.
 
+## Índice
+- [Sobre o Projeto](#sobre-o-projeto)
+- [Funcionalidades](#funcionalidades)
+- [Interface](#interface)
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Instalação](#instalação)
+- [Como Utilizar](#como-utilizar)
+- [Status](#status)
+- [Autor](#autor)
+- [Licença](#licença)
+
+
 ## Sobre o Projeto
 
 O LeitorSEFAZ foi desenvolvido para automatizar o processo de consulta de notas fiscais eletrônicas no portal da SEFAZ-PE e registrar as informações em uma planilha Excel, reduzindo a necessidade de preenchimento manual.
