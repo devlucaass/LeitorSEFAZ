@@ -1,18 +1,23 @@
 # LeitorSEFAZ
 
+![Python](https://img.shields.io/badge/Python-3.13-3776AB?style=flat&logo=python&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
+
 Aplicação desktop desenvolvida em Python para consulta de notas fiscais através do portal da SEFAZ-PE. Os dados são coletados automaticamente e armazenados em uma planilha Excel.
 
 ## Índice
 - [Sobre o Projeto](#sobre-o-projeto)
 - [Funcionalidades](#funcionalidades)
 - [Interface](#interface)
+- [Dados Coletados](#dados-coletados)
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Pré-requisitos](#pré-requisitos)
 - [Instalação](#instalação)
 - [Como Utilizar](#como-utilizar)
 - [Status](#status)
 - [Autor](#autor)
 - [Licença](#licença)
-
 
 ## Sobre o Projeto
 
@@ -31,10 +36,14 @@ O LeitorSEFAZ foi desenvolvido para automatizar o processo de consulta de notas 
 
 ## Dados Coletados
 
-- Chave de acesso
 - Data de emissão
-- Valor total dos itens
-- Informações do emitente
+- Estabelecimento
+- Produto
+- Unidade de medida
+- Quantidade comprada
+- Valor unitário
+- Quantidade
+- Valor total
 
 ## Tecnologias Utilizadas
 
@@ -45,6 +54,12 @@ O LeitorSEFAZ foi desenvolvido para automatizar o processo de consulta de notas 
 - Pillow
 - Pyzbar
 - CustomTkinter
+
+## Pré-requisitos
+
+- Python 3.10 ou superior
+- Mozilla Firefox instalado
+- Microsoft Excel instalado (para integração via xlwings)
 
 ## Instalação
 
@@ -58,7 +73,8 @@ cd LeitorSEFAZ
 ```powershell
 python -m venv venv
 ```
-### Ative o ambiente virtual (Powershell)
+
+### Ative o ambiente virtual (PowerShell)
 ```powershell
 .\venv\Scripts\Activate.ps1
 ```
@@ -75,15 +91,17 @@ python src/main.py
 
 ## Como Utilizar
 
-1. Abra o programa
-2. Gere uma planilha modelo no botão "Gerar modelo de planilha"
-3. Salve a planilha modelo onde preferir
-4. Vá em configurações
-5. Clique em "Localizar planilha" e selecione ela
-6. Salve as configurações e feche a janela
-7. Forneça a célula pela qual quer iniciar
-8. Leia o QR Code ou insira a chave da nota manualmente (OBS.: se inserir manualmente, resolva o CAPTCHA do site)
-9. Aguarde a planilha abrir sozinha ou deixe a planilha modelo aberta
+1. Abra o programa.
+2. Gere uma planilha modelo no botão "Gerar modelo de planilha".
+3. Salve a planilha modelo onde preferir.
+4. Vá em configurações.
+5. Clique em "Localizar planilha" e selecione ela.
+6. Salve as configurações e feche a janela.
+7. Forneça a célula pela qual quer iniciar.
+8. Escolha como informar a chave de acesso:
+   - **QR Code**: clique em "Ler QR Code" e aponte a câmera para o código da nota (não requer resolver CAPTCHA).
+   - **Manual**: digite a chave no campo e clique em "Iniciar" — será necessário resolver o CAPTCHA do site.
+9. Aguarde a planilha abrir sozinha ou deixe a planilha modelo aberta.
 
 ## Status
 
