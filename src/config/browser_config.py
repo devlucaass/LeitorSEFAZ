@@ -7,48 +7,50 @@ from selenium.webdriver.firefox.options import Options as FirefoxOptions
 class BrowserConfig:
 
     @staticmethod
-    def configure_firefox(headless=False):
+    def configure_browser(browser_name, headless=False):
+        browsers = {
+            "firefox": BrowserConfig._configure_firefox,
+            "chrome": BrowserConfig._configure_chrome,
+            "edge": BrowserConfig._configure_edge,
+        }
+
+        return browsers[browser_name](headless)
+
+    @staticmethod
+    def _configure_firefox(headless):
         options = FirefoxOptions()
+
         options.set_preference("dom.webnotifications.enabled", False)
         options.set_preference("layout.css.devPixelsPerPx", "0.7")
 
         if headless:
             options.add_argument("--headless")
 
-        return BrowserConfig._create_driver_firefox(options)
-
-    @staticmethod
-    def configure_chrome(headless=False):
-        options = ChromeOptions()
-        options.add_argument("--disable-notifications")
-        options.add_argument("--force-device-scale-factor=0.7")
-
-        if headless:
-            options.add_argument("--headless")
-
-        return BrowserConfig._create_driver_chrome(options)
-
-    @staticmethod
-    def configure_edge(headless=False):
-        options = EdgeOptions()
-        options.add_argument("--disable-notifications")
-        options.add_argument("--force-device-scale-factor=0.7")
-
-        if headless:
-            options.add_argument("--headless")
-
-        return BrowserConfig._create_driver_edge(options)
-
-    @staticmethod
-    def _create_driver_firefox(options):
         return webdriver.Firefox(options=options)
 
     @staticmethod
-    def _create_driver_chrome(options):
+    def _configure_chrome(headless):
+        options = ChromeOptions()
+
+        options.add_argument("--disable-notifications")
+        options.add_argument("--force-device-scale-factor=0.7")
+
+        if headless:
+            options.add_argument("--headless")
+
         return webdriver.Chrome(options=options)
 
     @staticmethod
-    def _create_driver_edge(options):
+    def _configure_edge(headless):
+        options = EdgeOptions()
+
+        options.add_argument("--disable-notifications")
+        options.add_argument("--force-device-scale-factor=0.7")
+
+        if headless:
+            options.add_argument("--headless")
+
         return webdriver.Edge(options=options)
+
 
 
