@@ -1,35 +1,40 @@
-from selenium import webdriver
 from selenium.common.exceptions import (
     NoSuchElementException,
     TimeoutException,
     WebDriverException,
 )
 from selenium.webdriver.common.by import By
-from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+
+from config.browser_config import BrowserConfig
 
 
 class SefazClient:
     def __init__(self):
         self.driver = None
 
-    def configure_browser(self, url, headless=False):
-        options = Options()
-        options.set_preference("dom.webnotifications.enabled", False)
-        options.set_preference("layout.css.devPixelsPerPx", "0.7")
+    def configure_browser(self, url, browser_name="edge", headless=False):
+        if browser_name == "firefox":
+            self.driver = BrowserConfig.configure_firefox(headless)
 
-        if headless:
-            options.add_argument("--headless")
+        elif browser_name == "chrome":
+            self.driver = BrowserConfig.configure_chrome(headless)
+
+        elif browser_name == "edge":
+            self.driver = BrowserConfig.configure_edge(headless)
+
         try:
-            self.driver = webdriver.Firefox(options=options)
-            self.driver.maximize_window()
+            if not headless:
+                self.driver.maximize_window()
+
             self.driver.get(url)
 
             return True
 
         except WebDriverException:
             self._close_browser()
+
             return False
 
     def enter_access_key(self, access_key):
