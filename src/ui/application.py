@@ -276,7 +276,7 @@ class Application:
         if not ExcelBot.create_spreadsheet_template():
             messagebox.showerror(
                 "Erro",
-                "Não foi possível gerar o modelo de planilha.",
+                "Não foi possível gerar o modelo de planilha.\nCertifique-se de fechar a planilha modelo para prosseguir.",
             )
             return
 
