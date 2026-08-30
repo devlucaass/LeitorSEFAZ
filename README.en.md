@@ -1,4 +1,4 @@
-[🇧🇷 Português](README.md) | 🇺🇸 English
+[🇧🇷 Português](README.md) | [🇺🇸 English](README.en.md)
 
 # LeitorSEFAZ
 
