@@ -29,6 +29,7 @@ O LeitorSEFAZ foi desenvolvido para automatizar o processo de consulta de notas 
 - Inserção manual da chave de acesso ou via QR Code.
 - Consulta automática de notas fiscais na SEFAZ-PE.
 - Armazenamento automático dos dados em planilha Excel.
+- Suporte a múltiplos navegadores: Firefox, Chrome e Edge.
 
 ## Interface
 
@@ -58,8 +59,8 @@ O LeitorSEFAZ foi desenvolvido para automatizar o processo de consulta de notas 
 ## Pré-requisitos
 
 - Python 3.10 ou superior
-- Mozilla Firefox instalado
-- Microsoft Excel instalado (para integração via xlwings)
+- Um dos navegadores suportados instalado: Mozilla Firefox, Google Chrome ou Microsoft Edge
+- Microsoft Excel instalado no computador (para integração via xlwings)
 
 ## Instalação
 
@@ -96,12 +97,13 @@ python src/main.py
 3. Salve a planilha modelo onde preferir.
 4. Vá em configurações.
 5. Clique em "Localizar planilha" e selecione ela.
-6. Salve as configurações e feche a janela.
-7. Forneça a célula pela qual quer iniciar.
-8. Escolha como informar a chave de acesso:
+6. Escolha o navegador que deseja utilizar (Firefox, Chrome ou Edge).
+7. Salve as configurações e feche a janela.
+8. Forneça a célula pela qual quer iniciar.
+9. Escolha como informar a chave de acesso:
    - **QR Code**: clique em "Ler QR Code" e aponte a câmera para o código da nota (não requer resolver CAPTCHA).
    - **Manual**: digite a chave no campo e clique em "Iniciar" — será necessário resolver o CAPTCHA do site.
-9. Aguarde a planilha abrir sozinha ou deixe a planilha modelo aberta.
+10. Aguarde a planilha abrir sozinha ou deixe a planilha modelo aberta.
 
 ## Status
 
