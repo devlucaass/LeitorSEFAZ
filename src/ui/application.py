@@ -331,10 +331,6 @@ class Application:
         url, access_key = QRCode.read_qrcode()
 
         if not url:
-            self.root.after(
-                0,
-                lambda: messagebox.showerror("Erro", "Verifique se o QRCode é válido"),
-            )
             return
 
         self.root.after(
