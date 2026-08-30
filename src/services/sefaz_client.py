@@ -14,7 +14,7 @@ class SefazClient:
     def __init__(self):
         self.driver = None
 
-    def configure_browser(self, url, browser_name, headless=False):
+    def configure_browser(self, url: str, browser_name: str, headless=False):
         try:
             self.driver = BrowserConfig.configure_browser(browser_name, headless)
 
