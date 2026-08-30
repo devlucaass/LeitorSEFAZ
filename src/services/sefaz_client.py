@@ -104,7 +104,7 @@ class SefazClient:
         self.driver.switch_to.default_content()
 
     def _click_consult_button(self):
-        WebDriverWait(self.driver, 30).until(
+        WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable(
                 (By.XPATH, "//button[contains(text(), 'Consultar')]")
             )
