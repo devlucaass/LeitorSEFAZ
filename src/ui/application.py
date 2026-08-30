@@ -12,8 +12,10 @@ from customtkinter import (
 )
 from PIL import Image
 
+from config.config_manager import ConfigManager
 from config.constants import (
     APP_ICON_PATH,
+    BROWSER_NAME_KEY,
     GEAR_IMAGE_PATH,
     QRCODE_IMAGE_PATH,
     URL_SEFAZ,
@@ -252,14 +254,17 @@ class Application:
         return self.entry_excel_cell.get()
 
     def _run_sefaz(self, access_key, url=None):
+        config = ConfigManager.load_config()
+        browser_name = config[BROWSER_NAME_KEY]
+
         sefaz_client = SefazClient()
 
         if url:
-            if not sefaz_client.configure_browser(url, headless=True):
+            if not sefaz_client.configure_browser(url, browser_name, headless=True):
                 return []
 
         else:
-            if not sefaz_client.configure_browser(URL_SEFAZ):
+            if not sefaz_client.configure_browser(URL_SEFAZ, browser_name):
                 return []
 
             if not sefaz_client.enter_access_key(access_key):
@@ -326,7 +331,15 @@ class Application:
         url, access_key = QRCode.read_qrcode()
 
         if not url:
+            self.root.after(
+                0,
+                lambda: messagebox.showerror("Erro", "Verifique se o QRCode é válido"),
+            )
             return
+
+        self.root.after(
+            0, lambda: messagebox.showinfo("QRCode válido", "QRCode lido com sucesso!")
+        )
 
         self._run_process(access_key, excel_cell, url)
 
