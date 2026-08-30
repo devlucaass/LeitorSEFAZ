@@ -21,7 +21,6 @@ class BrowserConfig:
         options = FirefoxOptions()
 
         options.set_preference("dom.webnotifications.enabled", False)
-        options.set_preference("layout.css.devPixelsPerPx", "0.7")
 
         if headless:
             options.add_argument("--headless")
@@ -33,7 +32,6 @@ class BrowserConfig:
         options = ChromeOptions()
 
         options.add_argument("--disable-notifications")
-        options.add_argument("--force-device-scale-factor=0.7")
 
         if headless:
             options.add_argument("--headless")
@@ -45,7 +43,6 @@ class BrowserConfig:
         options = EdgeOptions()
 
         options.add_argument("--disable-notifications")
-        options.add_argument("--force-device-scale-factor=0.7")
 
         if headless:
             options.add_argument("--headless")
