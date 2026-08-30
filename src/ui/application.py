@@ -331,6 +331,10 @@ class Application:
         url, access_key = QRCode.read_qrcode()
 
         if not url:
+            self.root.after(
+                0,
+                lambda: messagebox.showwarning("Alerta", "QRCode não informado ou inválido"),
+            )
             return
 
         self.root.after(
