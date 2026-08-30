@@ -1,3 +1,5 @@
+[🇧🇷 Português](README.md) | [🇺🇸 English](README.en.md)
+
 # LeitorSEFAZ
 
 ![Python](https://img.shields.io/badge/Python-3.13-3776AB?style=flat&logo=python&logoColor=white)
