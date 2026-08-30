@@ -172,7 +172,7 @@ class SettingsWindow(CTkToplevel):
     def _save_settings(self):
         excel_path = self.entry_excel_path.get()
         sheet_name = self.entry_sheet_name.get()
-        browser_name = self.cb_browser.get()
+        browser_name = self.cb_browser.get().lower()
 
         success = ConfigManager.save_config(excel_path, sheet_name, browser_name)
 
