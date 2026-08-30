@@ -14,17 +14,10 @@ class SefazClient:
     def __init__(self):
         self.driver = None
 
-    def configure_browser(self, url, browser_name="edge", headless=False):
-        if browser_name == "firefox":
-            self.driver = BrowserConfig.configure_firefox(headless)
-
-        elif browser_name == "chrome":
-            self.driver = BrowserConfig.configure_chrome(headless)
-
-        elif browser_name == "edge":
-            self.driver = BrowserConfig.configure_edge(headless)
-
+    def configure_browser(self, url, browser_name, headless=False):
         try:
+            self.driver = BrowserConfig.configure_browser(browser_name, headless)
+
             if not headless:
                 self.driver.maximize_window()
 
