@@ -3,9 +3,4 @@ __pycache__/
 *.pyc
 .vscode/
 .env
-~$test.xlsx
-test.xlsx
 data/
-venv/
-test.py
-modelo_planilha.xlsx
