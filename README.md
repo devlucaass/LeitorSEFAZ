@@ -73,7 +73,7 @@ Você pode baixar a versão mais recente do LeitorSEFAZ através da página de R
 - Um dos navegadores suportados instalado: Mozilla Firefox, Google Chrome ou Microsoft Edge
 - Microsoft Excel instalado no computador (para integração via Xlwings)
 
-## Instalação (para testes)
+## Instalação
 
 ### Clone o repositório
 
@@ -106,7 +106,7 @@ pip install -r requirements.txt
 ```powershell
 python src/main.py
 ```
-## Executável (para testes)
+## Executável
 
 ### Instale o PyInstaller
 
