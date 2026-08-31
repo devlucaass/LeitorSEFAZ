@@ -69,7 +69,6 @@ You can download the latest version of LeitorSEFAZ from the project's Releases p
 
 ## Prerequisites
 
-- Python 3.10 or higher
 - One of the supported browsers installed: Mozilla Firefox, Google Chrome, or Microsoft Edge
 - Microsoft Excel installed on the computer (required for Xlwings integration)
 
