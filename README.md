@@ -69,7 +69,6 @@ Você pode baixar a versão mais recente do LeitorSEFAZ através da página de R
 
 ## Pré-requisitos
 
-- Python 3.10 ou superior
 - Um dos navegadores suportados instalado: Mozilla Firefox, Google Chrome ou Microsoft Edge
 - Microsoft Excel instalado no computador (para integração via Xlwings)
 
