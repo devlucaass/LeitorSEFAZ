@@ -1,7 +1,4 @@
-# -*- mode: python ; coding: utf-8 -*-
-
 from pathlib import Path
-
 
 pyzbar_path = Path(r"venv\Lib\site-packages\pyzbar")
 
@@ -10,12 +7,14 @@ binaries = [
     (str(pyzbar_path / "libzbar-64.dll"), "pyzbar"),
 ]
 
-
 a = Analysis(
     ["src/main.py"],
     pathex=[],
     binaries=binaries,
-    datas=[],
+    datas=[
+        ("assets/icons", "assets/icons"),
+        ("assets/images", "assets/images"),
+    ],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
