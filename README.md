@@ -3,9 +3,7 @@
 # LeitorSEFAZ
 
 ![Python](https://img.shields.io/badge/Python-3.13-3776AB?style=flat&logo=python&logoColor=white)
-
 ![License](https://img.shields.io/badge/license-MIT-green)
-
 ![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
 
 Aplicação desktop desenvolvida em Python para consulta de notas fiscais através do portal da SEFAZ-PE. Os dados são coletados automaticamente e armazenados em uma planilha Excel.
@@ -19,7 +17,7 @@ Aplicação desktop desenvolvida em Python para consulta de notas fiscais atrav�
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
 - [Download](#download)
 - [Pré-requisitos](#pré-requisitos)
-- [Instalação](#instalação)
+- [Instalação](#instalação-para-testes)
 - [Executável](#executável)
 - [Como Utilizar](#como-utilizar)
 - [Status](#status)
@@ -46,7 +44,7 @@ O LeitorSEFAZ foi desenvolvido para automatizar o processo de consulta de notas 
 
 - Data de emissão
 - Estabelecimento
-- Produto
+- Nome do produto
 - Unidade de medida
 - Quantidade comprada
 - Valor unitário
@@ -71,11 +69,11 @@ Você pode baixar a versão mais recente do LeitorSEFAZ através da página de R
 
 ## Pré-requisitos
 
-- Python 3.13
+- Python 3.10 ou superior
 - Um dos navegadores suportados instalado: Mozilla Firefox, Google Chrome ou Microsoft Edge
 - Microsoft Excel instalado no computador (para integração via Xlwings)
 
-## Instalação
+## Instalação (para testes)
 
 ### Clone o repositório
 
