@@ -18,7 +18,7 @@ Aplicação desktop desenvolvida em Python para consulta de notas fiscais atrav�
 - [Download](#download)
 - [Pré-requisitos](#pré-requisitos)
 - [Instalação](#instalação-para-testes)
-- [Executável](#executável)
+- [Executável](#executável-para-testes)
 - [Como Utilizar](#como-utilizar)
 - [Status](#status)
 - [Autor](#autor)
@@ -106,10 +106,17 @@ pip install -r requirements.txt
 ```powershell
 python src/main.py
 ```
+## Executável (para testes)
 
-## Executável
+### Instale o PyInstaller
 
 O LeitorSEFAZ também pode ser gerado como um executável para Windows utilizando o PyInstaller.
+
+Com o ambiente virtual ativado, execute:
+
+```powershell
+pip install pyinstaller
+````
 
 O projeto possui um arquivo de configuração específico para o processo de build:
 
