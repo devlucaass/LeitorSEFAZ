@@ -141,13 +141,13 @@ The `build/` directory contains temporary files used during the build process, w
 
 1. Open the application.
 
-2. Generate a spreadsheet template using the "Generate spreadsheet template" button.
+2. Generate a spreadsheet template using the "Gerar modelo da planilha" button.
 
 3. Save the spreadsheet template wherever you prefer.
 
 4. Open the settings.
 
-5. Click "Locate spreadsheet" and select the spreadsheet template.
+5. Click "Localizar planilha" and select the spreadsheet template.
 
 6. Choose the browser you want to use (Firefox, Chrome, or Edge).
 
@@ -157,9 +157,9 @@ The `build/` directory contains temporary files used during the build process, w
 
 9. Choose how to provide the access key:
 
-   - **QR Code**: click "Scan QR Code" and point the camera at the invoice's QR Code. No CAPTCHA is required.
+   - **QR Code**: click "Ler QRCode" and point the camera at the invoice's QR Code. No CAPTCHA is required.
 
-   - **Manual**: enter the access key in the field and click "Start". You will need to solve the website's CAPTCHA.
+   - **Manual**: enter the access key in the field and click "Iniciar". You will need to solve the website's CAPTCHA.
 
 10. Wait for the spreadsheet to open automatically or keep the spreadsheet template open.
 
