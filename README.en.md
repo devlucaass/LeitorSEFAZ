@@ -152,7 +152,7 @@ The `build/` directory contains temporary files used during the build process, w
 
 7. Save the settings and close the window.
 
-8. Enter the cell from which you want to start.
+8. Enter the cell from which you want to start. **(The first row must be reserved for the column headers.)**
 
 9. Choose how to provide the access key:
 
