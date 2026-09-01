@@ -17,8 +17,8 @@ Aplicação desktop desenvolvida em Python para consulta de notas fiscais atrav�
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
 - [Download](#download)
 - [Pré-requisitos](#pré-requisitos)
-- [Instalação](#instalação-para-testes)
-- [Executável](#executável-para-testes)
+- [Instalação](#instalação)
+- [Executável](#executável)
 - [Como Utilizar](#como-utilizar)
 - [Status](#status)
 - [Autor](#autor)
@@ -149,7 +149,7 @@ O diretório `build/` contém arquivos temporários utilizados durante o process
 
 7. Salve as configurações e feche a janela.
 
-8. Forneça a célula pela qual quer iniciar.
+8. Forneça a célula pela qual quer iniciar. **(A primeira linha deve ser reservada aos títulos das colunas)**
 
 9. Escolha como informar a chave de acesso:
 
