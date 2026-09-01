@@ -1,11 +1,15 @@
+# -*- mode: python ; coding: utf-8 -*-
+
 from pathlib import Path
 
-pyzbar_path = Path(r"venv\Lib\site-packages\pyzbar")
+
+pyzbar_path = Path("venv/Lib/site-packages/pyzbar")
 
 binaries = [
     (str(pyzbar_path / "libiconv.dll"), "pyzbar"),
     (str(pyzbar_path / "libzbar-64.dll"), "pyzbar"),
 ]
+
 
 a = Analysis(
     ["src/main.py"],
@@ -14,6 +18,7 @@ a = Analysis(
     datas=[
         ("assets/icons", "assets/icons"),
         ("assets/images", "assets/images"),
+        ("src/config/settings.json", "config"),
     ],
     hiddenimports=[],
     hookspath=[],
@@ -23,6 +28,7 @@ a = Analysis(
     noarchive=False,
     optimize=0,
 )
+
 pyz = PYZ(a.pure)
 
 exe = EXE(
@@ -30,18 +36,20 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='LeitorSEFAZ',
+    name="LeitorSEFAZ",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
-    console=True,
+    console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon="assets/icons/logo.ico",
 )
+
 coll = COLLECT(
     exe,
     a.binaries,
@@ -49,5 +57,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='LeitorSEFAZ',
+    name="LeitorSEFAZ",
 )
