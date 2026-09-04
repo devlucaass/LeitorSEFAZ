@@ -55,6 +55,7 @@ O LeitorSEFAZ foi desenvolvido para automatizar o processo de consulta de notas 
 
 - Python
 - OpenCV
+- Openpyxl
 - Selenium
 - Xlwings
 - Pillow
