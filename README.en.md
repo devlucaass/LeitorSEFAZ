@@ -55,6 +55,7 @@ LeitorSEFAZ was developed to automate the process of querying electronic invoice
 
 - Python
 - OpenCV
+- Openpyxl
 - Selenium
 - Xlwings
 - Pillow
